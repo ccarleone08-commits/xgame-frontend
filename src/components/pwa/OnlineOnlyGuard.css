@@ -1,0 +1,69 @@
+.offline-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+  color: var(--text-primary, #dcf5ea);
+  background:
+    linear-gradient(rgba(5, 10, 8, 0.78), rgba(5, 10, 8, 0.82)),
+    url('/assets/siteImages/siteMainBG.png') center top / cover no-repeat,
+    #0b1511;
+}
+
+.offline-screen__panel {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.offline-screen__mark {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--danger, #ff6b81);
+  border-radius: 50%;
+  color: var(--danger, #ff6b81);
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.offline-screen h1 {
+  max-width: 100%;
+  color: var(--white, #f4fff9);
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.offline-screen p {
+  max-width: 28ch;
+  color: var(--text-muted, #b7d6c8);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.offline-screen__button {
+  min-width: 132px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 20px;
+  color: var(--text-on-accent, #0e1a14);
+  background: var(--accent, #b8f3d8);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.offline-screen__button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}

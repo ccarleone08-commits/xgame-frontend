@@ -1,0 +1,277 @@
+/* COLORS */
+:root {
+	/* Backgrounds */
+	--primary-bg: #192d25;
+	--black: #050a08;
+	--bg-dark-2: #193127;
+	--surface: #1d3a2d;
+	--surface-2: #234d3b;
+
+	/* Text */
+	--text-primary: #e8fff4;
+	--white: #ffffff;
+	--text-on-accent: #0a1410;
+	--text-muted: #a3c1b3;
+
+	/* Accent / Jade & Platinum */
+	--accent: #b8f3d8;
+	--accent-2: #8fedd1;
+	--accent-3: #6ee7c4;
+	--accent-4: #a0f0cc;
+	--accent-5: #d4ffeb;
+	--accent-6: #7ae5ba;
+
+	/* Purples */
+	--purple-1: #3da887;
+	--purple-2: #2bcc9a;
+
+	/* Muted / greys */
+	--muted: #7fa395;
+	--muted-2: #aac9bc;
+	--muted-3: #c8e0d8;
+
+	/* Success / Danger */
+	--success: #1de9b6;
+	--success-dark: #00bfa5;
+	--danger: #ff5370;
+	--danger-dark: #e84258;
+
+	/* Other */
+	--brown-dark: #2d4d3d;
+
+	/* RGBA variants */
+	--accent-opaque-01: rgba(184, 243, 216, 0.1);
+	--accent-opaque-02: rgba(184, 243, 216, 0.2);
+	--accent-opaque-03: rgba(184, 243, 216, 0.3);
+	--accent-opaque-04: rgba(184, 243, 216, 0.4);
+	--accent-opaque-05: rgba(184, 243, 216, 0.05);
+	--accent-rgba-239-203-095: rgba(184, 243, 216, 0.95);
+	--white-05: rgba(255, 255, 255, 0.05);
+	--white-03: rgba(255, 255, 255, 0.03);
+	--white-08: rgba(255, 255, 255, 0.08);
+	--white-10: rgba(255, 255, 255, 0.1);
+	--white-15: rgba(255, 255, 255, 0.15);
+	--text-muted-07: rgba(232, 255, 244, 0.7);
+	--white-05-border: rgba(255, 255, 255, 0.05);
+	--white-02: rgba(255, 255, 255, 0.02);
+	--black-20: rgba(0, 0, 0, 0.2);
+	--purple-shadow-30: rgba(61, 168, 135, 0.3);
+	--purple-shadow-40: rgba(61, 168, 135, 0.4);
+}
+
+/* COLORS – Balanced Dark (Less Boğucu) */
+:root {
+	/* Backgrounds */
+	--primary-bg: #264639;
+	--black: #0b1511;
+	--bg-dark-2: #204236;
+	--surface: #254a3a;
+	--surface-2: #2b5a46;
+
+	/* Text */
+	--text-primary: #dcf5ea;
+	--white: #f4fff9;
+	--text-on-accent: #0e1a14;
+	--text-muted: #b7d6c8;
+
+	/* Accent / Jade */
+	--accent: #b8f3d8;
+	--accent-2: #8fedd1;
+	--accent-3: #6ee7c4;
+	--accent-4: #a0f0cc;
+	--accent-5: #d4ffeb;
+	--accent-6: #7ae5ba;
+
+	/* Accent Greens */
+	--purple-1: #3da887;
+	--purple-2: #2bcc9a;
+
+	/* Muted / greys */
+	--muted: #8fb6a6;
+	--muted-2: #b8dbcd;
+	--muted-3: #d6efe6;
+
+	/* Success / Danger */
+	--success: #1de9b6;
+	--success-dark: #00bfa5;
+	--danger: #ff6b81;
+	--danger-dark: #e85668;
+
+	/* Other */
+	--brown-dark: #355b49;
+
+	/* RGBA variants */
+	--accent-opaque-01: rgba(184, 243, 216, 0.14);
+	--accent-opaque-02: rgba(184, 243, 216, 0.26);
+	--accent-opaque-03: rgba(184, 243, 216, 0.38);
+	--accent-opaque-04: rgba(184, 243, 216, 0.48);
+	--accent-opaque-05: rgba(184, 243, 216, 0.08);
+	--accent-rgba-239-203-095: rgba(184, 243, 216, 0.95);
+
+	--white-02: rgba(255, 255, 255, 0.02);
+	--white-03: rgba(255, 255, 255, 0.03);
+	--white-05: rgba(255, 255, 255, 0.05);
+	--white-08: rgba(255, 255, 255, 0.08);
+	--white-10: rgba(255, 255, 255, 0.1);
+	--white-15: rgba(255, 255, 255, 0.15);
+
+	--text-muted-07: rgba(220, 245, 234, 0.7);
+
+	--soft-shadow: rgba(122, 229, 186, 0.12);
+	--soft-shadow-strong: rgba(122, 229, 186, 0.22);
+}
+
+
+/* RESET CSS */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+/* Hide TopBar and NavBar */
+body.no-layout .navbar,
+body.no-layout .top-bar {
+	display: none !important;
+}
+
+/* Full height for game pages  */
+body.no-layout {
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+}
+/* 
+html, body {
+  overscroll-behavior-x: none;
+} */

@@ -1,0 +1,50 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 1000" width="500" height="1000">
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(472.48,109.081,-171.085,741.052,13.76,445.46)">
+			<stop offset="0" stop-color="#dedacc"/>
+			<stop offset="1" stop-color="#a7a59c"/>
+		</linearGradient>
+		<linearGradient id="g2" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0,37.24,-811.44,0,250,480.88)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g3" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,200,259.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g4" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,226.5,250.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g5" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,200,729.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g6" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,226.5,720.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: #bebbae;stroke: url(#g1);stroke-linejoin: round;stroke-width: 12 } 
+		.s1 { fill: #2e2e2e;stroke: url(#g2);paint-order:stroke fill markers;stroke-width: 11.4 } 
+		.s2 { fill: url(#g3);stroke: url(#g4);stroke-miterlimit:100;stroke-width: 12 } 
+		.s3 { fill: url(#g5);stroke: url(#g6);stroke-miterlimit:100;stroke-width: 12 } 
+	</style>
+	<g id="layer1">
+		<path id="rect1872" fill-rule="evenodd" class="s0" d="m63.76 13.76h372.48c27.61 0 50 22.38 50 50v872.48c0 27.61-22.39 50-50 50h-372.48c-27.62 0-50-22.39-50-50v-872.48c0-27.62 22.38-50 50-50z"/>
+		<path id="Shape 1" fill-rule="evenodd" class="s1" d="m457 490v19h-414v-19z"/>
+		<g id="layer2">
+			<path id="circle10" class="s2" d="m250 309.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+			<path id="circle10 copy" class="s3" d="m250 779.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+		</g>
+	</g>
+</svg>

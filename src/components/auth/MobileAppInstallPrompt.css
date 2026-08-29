@@ -1,0 +1,422 @@
+.mobile-app-install {
+  display: none;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .mobile-app-install {
+    --install-navbar-height: calc(70px + env(safe-area-inset-bottom));
+    --install-strip-height: 25px;
+    display: block;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .mobile-app-install__trigger {
+    position: fixed;
+    top: auto;
+    bottom: var(--install-navbar-height);
+    left: 0;
+    right: 0;
+    z-index: 999;
+    width: 100%;
+    height: var(--install-strip-height);
+    transform: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 2px 12px;
+    border: 0;
+    border-top: 1px solid rgba(255, 215, 120, 0.22);
+    border-bottom: 1px solid rgba(17, 19, 24, 0.08);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.96);
+    color: #111318;
+    box-shadow: 0 -5px 14px rgba(0, 0, 0, 0.16);
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-app-install__trigger-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    overflow: hidden;
+    flex: 0 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+  }
+
+  .mobile-app-install__trigger-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-app-install__overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: calc(var(--install-navbar-height) + var(--install-strip-height));
+    left: 0;
+    z-index: 998;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: calc(8px + env(safe-area-inset-top)) 0 0;
+    background: rgba(0, 0, 0, 0.38);
+    opacity: 1;
+    transition: opacity 0.22s ease;
+  }
+
+  .mobile-app-install__overlay.is-closing {
+    opacity: 0;
+  }
+
+  .mobile-app-install__sheet {
+    position: relative;
+    width: min(100%, 430px);
+    max-height: calc(100dvh - var(--install-navbar-height) - var(--install-strip-height) - 12px - env(safe-area-inset-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 13px 13px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-bottom: 0;
+    border-radius: 20px 20px 0 0;
+    background: #ffffff;
+    color: #14161c;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    transform-origin: bottom center;
+    animation: mobileInstallOpen 0.26s cubic-bezier(0.2, 0.9, 0.24, 1) both;
+  }
+
+  .mobile-app-install__sheet.is-closing {
+    animation: mobileInstallClose 0.22s ease both;
+  }
+
+  @keyframes mobileInstallOpen {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes mobileInstallClose {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
+  .mobile-app-install__handle {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 32px;
+    height: 3px;
+    border-radius: 999px;
+    background: #dedfe3;
+    transform: translateX(-50%);
+  }
+
+  .mobile-app-install__header {
+    margin: 0 0 9px;
+  }
+
+  .mobile-app-install__header h2 {
+    margin: 0;
+    color: #121318;
+    font-size: clamp(1.08rem, 5.2vw, 1.42rem);
+    line-height: 1.08;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  .mobile-app-install__tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    height: 40px;
+    padding: 3px;
+    border-radius: 15px;
+    background: #f2f2f3;
+    box-shadow: inset 0 0 0 1px rgba(15, 17, 22, 0.03);
+  }
+
+  .mobile-app-install__tab {
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: #1a1c22;
+    font: inherit;
+    font-size: clamp(0.78rem, 3.7vw, 0.98rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+
+  .mobile-app-install__tab.is-active {
+    background: #e4e5e8;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .mobile-app-install__preview {
+    height: clamp(108px, 19vh, 148px);
+    margin: 11px 0 12px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border-radius: 17px;
+    background:
+      radial-gradient(circle at 50% 108%, rgba(0, 0, 0, 0.1), transparent 34%),
+      #f7f7f8;
+    overflow: hidden;
+  }
+
+  .mobile-app-install__phone {
+    width: min(42vw, 132px);
+    height: clamp(114px, 20vh, 148px);
+    margin-bottom: -31px;
+    padding: 7px 6px;
+    border: 4px solid #090a0d;
+    border-radius: 23px 23px 0 0;
+    background: #202124;
+    color: #eef0f5;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .mobile-app-install__phone--ios {
+    background: #1d1f23;
+  }
+
+  .mobile-app-install__phone-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 7px 5px;
+    color: #ffffff;
+    font-size: 0.46rem;
+    font-weight: 800;
+  }
+
+  .mobile-app-install__phone-status span:last-child {
+    width: 18px;
+    height: 5px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, #ffffff 0 25%, transparent 25% 36%, #ffffff 36% 60%, transparent 60% 70%, #ffffff 70% 100%);
+    opacity: 0.86;
+  }
+
+  .mobile-app-install__phone-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 23px;
+    margin: 0 -2px;
+    padding: 5px 6px;
+    border-radius: 8px;
+    background: #2b2d32;
+    color: #ffffff;
+    font-size: 0.46rem;
+    font-weight: 800;
+  }
+
+  .mobile-app-install__phone-top strong {
+    color: #2da8ff;
+    font-weight: 900;
+  }
+
+  .mobile-app-install__phone-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    padding: 5px;
+    border-radius: 9px;
+    background: #2a2c31;
+    color: #ffffff;
+    font-size: 0.5rem;
+    font-weight: 800;
+  }
+
+  .mobile-app-install__phone-row img {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+  }
+
+  .mobile-app-install__phone-line {
+    height: 4px;
+    margin: 7px 6px 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .mobile-app-install__phone-line--short {
+    width: 64%;
+    margin-top: 5px;
+  }
+
+  .mobile-app-install__steps {
+    display: grid;
+    gap: 0;
+    margin: 0 0 11px;
+    padding: 0;
+    list-style: none;
+    counter-reset: installSteps;
+  }
+
+  .mobile-app-install__steps li {
+    position: relative;
+    min-height: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-left: 42px;
+    color: #15171d;
+    font-size: clamp(0.72rem, 3.4vw, 0.86rem);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-app-install__steps li::before {
+    counter-increment: installSteps;
+    content: counter(installSteps);
+    position: absolute;
+    top: -2px;
+    left: 0;
+    z-index: 1;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef0f4;
+    color: #6b7280;
+    font-size: 0.76rem;
+    font-weight: 900;
+  }
+
+  .mobile-app-install__steps li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 12px;
+    width: 2px;
+    height: calc(100% - 21px);
+    background: repeating-linear-gradient(to bottom, #e2e4e9 0 5px, transparent 5px 9px);
+  }
+
+  .mobile-app-install__android-panel {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 11px;
+  }
+
+  .mobile-app-install__android-panel p {
+    margin: 0;
+    color: #17191f;
+    font-size: clamp(0.72rem, 3.4vw, 0.88rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-app-install__apk-button,
+  .mobile-app-install__close {
+    min-height: 39px;
+    border: 0;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font: inherit;
+    font-size: clamp(0.78rem, 3.6vw, 0.92rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .mobile-app-install__apk-button {
+    background: #111318;
+    color: #ffffff;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .mobile-app-install__android-panel span {
+    color: #69707d;
+    font-size: 0.66rem;
+    font-weight: 700;
+    line-height: 1.24;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-app-install__close {
+    width: 100%;
+    background: #f1f1f2;
+    color: #15171d;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+
+  .mobile-app-install__close:active,
+  .mobile-app-install__apk-button:active {
+    transform: scale(0.985);
+  }
+
+  .mobile-app-install__trigger:active {
+    transform: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-app-install__sheet {
+    width: 100%;
+    padding: 12px 10px 10px;
+  }
+
+  .mobile-app-install__tabs {
+    height: 36px;
+  }
+
+  .mobile-app-install__preview {
+    height: 96px;
+    margin: 9px 0;
+  }
+
+  .mobile-app-install__steps li {
+    min-height: 33px;
+    padding-left: 37px;
+  }
+
+  .mobile-app-install__steps li::before {
+    width: 24px;
+    height: 24px;
+    font-size: 0.72rem;
+  }
+
+  .mobile-app-install__steps li:not(:last-child)::after {
+    left: 11px;
+    top: 23px;
+  }
+}

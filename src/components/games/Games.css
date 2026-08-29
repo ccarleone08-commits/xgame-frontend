@@ -1,0 +1,1726 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
+
+.games-page {
+  /* padding: 0px 0; */
+  display: flex;
+  /* flex-wrap: wrap; */
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--text-primary);
+}
+
+.game-card {
+  /* background: linear-gradient(180deg, #1e4233, #1e4233); */
+  background:
+    linear-gradient(177deg, #002e24, #00110d) padding-box,
+    linear-gradient(#9a6c13, #e0b45f) border-box;
+  border: 2px solid transparent;
+  height: 377px;
+  width: 177px;
+  border-radius: 37px;
+  background-clip: padding-box, border-box;
+  padding: 7px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 7px;
+  transition: transform 0.24s cubic-bezier(.2, .9, .2, 1), box-shadow 0.24s ease, border-color 0.24s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--white);
+  transform: skewX(7deg);
+}
+
+.game-card>*:not(.game-card-bg) {
+  position: relative;
+  z-index: 2;
+}
+
+.backgammon-card .backgammon-bg {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  width: 92%;
+  max-width: 170px;
+  height: auto;
+  transform: translateX(-50%);
+  opacity: 1;
+  filter:
+    drop-shadow(0 16px 22px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 16px rgba(255, 215, 120, 0.35)) saturate(1.2);
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+
+.backgammon-card:hover .backgammon-bg {
+  opacity: 1;
+  transform: translateX(-50%) scale(1.03);
+}
+
+.backgammon-card .backgammon-dice {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  width: 100%;
+  height: 45%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.backgammon-card .diceWrap {
+  position: absolute;
+  width: calc(var(--dice-size) * 2);
+  height: calc(var(--dice-size) * 2);
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.backgammon-card .diceWrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  width: 70%;
+  height: 16%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.35);
+  filter: blur(8px);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.backgammon-card .dice-wrap--left {
+  left: 36%;
+  top: -2%;
+}
+
+.backgammon-card .dice-wrap--right {
+  left: 64%;
+  top: 26%;
+}
+
+.backgammon-card .dice {
+  --dice-size: clamp(26px, 2.6vw, 34px);
+  --dice-bg: #f6f3f0;
+  --pip-main: #d83a33;
+  --pip-alt: #1c1a18;
+  position: absolute;
+  width: var(--dice-size);
+  height: var(--dice-size);
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%);
+}
+
+.backgammon-card .dice--ivory {
+  --dice-bg: #f5efe6;
+  --pip-main: #c9352d;
+  --pip-alt: #1b1a19;
+}
+
+.backgammon-card .diceFace {
+  box-sizing: border-box;
+  position: absolute;
+  width: var(--dice-size);
+  height: var(--dice-size);
+  background-color: var(--dice-bg);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: calc(var(--dice-size) * 0.2);
+  transform-style: preserve-3d;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.55),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.2),
+    0 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+.backgammon-card .diceFace::before {
+  position: absolute;
+  content: "";
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: inherit;
+  transform: translateZ(-1px);
+}
+
+.backgammon-card .diceFace::after {
+  position: absolute;
+  content: "";
+  width: calc(var(--dice-size) * 0.2);
+  height: calc(var(--dice-size) * 0.2);
+  top: 50%;
+  left: 50%;
+  margin: calc(var(--dice-size) * -0.1) 0 0 calc(var(--dice-size) * -0.1);
+  background-color: var(--pip-alt);
+  border-radius: 100%;
+  transform: translateZ(1px);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.35);
+}
+
+.backgammon-card .front {
+  transform: translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .front::after {
+  width: calc(var(--dice-size) * 0.42);
+  height: calc(var(--dice-size) * 0.42);
+  margin: calc(var(--dice-size) * -0.21) 0 0 calc(var(--dice-size) * -0.21);
+  background-color: var(--pip-main);
+}
+
+.backgammon-card .up {
+  transform: rotateX(90deg) translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .up::after {
+  margin: calc(var(--dice-size) * -0.32) 0 0 calc(var(--dice-size) * -0.32);
+  box-shadow: calc(var(--dice-size) * 0.42) calc(var(--dice-size) * 0.42) var(--pip-alt);
+}
+
+.backgammon-card .left {
+  transform: rotateY(-90deg) translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .left::after {
+  margin: calc(var(--dice-size) * -0.38) 0 0 calc(var(--dice-size) * -0.38);
+  box-shadow:
+    calc(var(--dice-size) * 0.3) calc(var(--dice-size) * 0.3) var(--pip-alt),
+    calc(var(--dice-size) * 0.6) calc(var(--dice-size) * 0.6) var(--pip-alt);
+}
+
+.backgammon-card .right {
+  transform: rotateY(90deg) translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .right::after {
+  margin: calc(var(--dice-size) * -0.32) 0 0 calc(var(--dice-size) * -0.32);
+  background-color: var(--pip-main);
+  box-shadow:
+    calc(var(--dice-size) * 0.42) 0 var(--pip-main),
+    0 calc(var(--dice-size) * 0.42) var(--pip-main),
+    calc(var(--dice-size) * 0.42) calc(var(--dice-size) * 0.42) var(--pip-main);
+}
+
+.backgammon-card .bottom {
+  transform: rotateX(-90deg) translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .bottom::after {
+  margin: calc(var(--dice-size) * -0.34) 0 0 calc(var(--dice-size) * -0.34);
+  box-shadow:
+    calc(var(--dice-size) * 0.26) calc(var(--dice-size) * 0.26) var(--pip-alt),
+    calc(var(--dice-size) * 0.52) calc(var(--dice-size) * 0.52) var(--pip-alt),
+    calc(var(--dice-size) * 0.52) 0 var(--pip-alt),
+    0 calc(var(--dice-size) * 0.52) var(--pip-alt);
+}
+
+.backgammon-card .back {
+  transform: rotateX(180deg) translateZ(calc(var(--dice-size) / 2));
+}
+
+.backgammon-card .back::after {
+  margin: calc(var(--dice-size) * -0.38) 0 0 calc(var(--dice-size) * -0.3);
+  box-shadow:
+    calc(var(--dice-size) * 0.4) 0 var(--pip-alt),
+    0 calc(var(--dice-size) * 0.3) var(--pip-alt),
+    calc(var(--dice-size) * 0.4) calc(var(--dice-size) * 0.3) var(--pip-alt),
+    0 calc(var(--dice-size) * 0.6) var(--pip-alt),
+    calc(var(--dice-size) * 0.4) calc(var(--dice-size) * 0.6) var(--pip-alt);
+}
+
+.backgammon-card .dice-wrap--right .dice {
+  transform: translate(-50%, -50%) rotateX(90deg) rotateZ(-6deg);
+}
+
+.backgammon-card .dice-wrap--left .dice {
+  transform: translate(-50%, -50%) rotateX(-90deg) rotateZ(6deg);
+}
+
+.backgammon-card:hover .dice-wrap--left .dice {
+  animation: backgammon-drop-left 1.15s ease-out forwards;
+  transform: translate(-50%, -50%) scale(1.16);
+}
+
+.backgammon-card:hover .dice-wrap--right .dice {
+  animation: backgammon-drop-right 1.2s ease-out forwards;
+  transform: translate(-50%, -50%) scale(1.16);
+  animation-delay: 0.08s;
+}
+
+@keyframes backgammon-drop-left {
+  0% {
+    transform: translate(-50%, -50%) translateY(-120px) rotate3d(1, 1, 1, 0deg);
+  }
+
+  60% {
+    transform: translate(-50%, -50%) translateY(4px) rotate3d(1, 1, 1, 540deg);
+  }
+
+  80% {
+    transform: translate(-50%, -50%) translateY(-10px) rotate3d(1, 1, 1, 600deg);
+  }
+
+  92% {
+    transform: translate(-50%, -50%) translateY(2px) rotate3d(1, 1, 1, 640deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translateY(0) rotateY(-10deg) rotateX(14deg) rotateZ(6deg);
+  }
+}
+
+@keyframes backgammon-drop-right {
+  0% {
+    transform: translate(-50%, -50%) translateY(-110px) rotate3d(1, 1, 1, 0deg);
+  }
+
+  60% {
+    transform: translate(-50%, -50%) translateY(3px) rotate3d(1, 1, 1, 520deg);
+  }
+
+  80% {
+    transform: translate(-50%, -50%) translateY(-9px) rotate3d(1, 1, 1, 590deg);
+  }
+
+  92% {
+    transform: translate(-50%, -50%) translateY(2px) rotate3d(1, 1, 1, 630deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translateY(0) rotateY(170deg) rotateX(12deg) rotateZ(-6deg);
+  }
+}
+
+@keyframes backgammon-rotate {
+  16% {
+    transform: translate(-50%, -50%) rotate3d(-0.1, 0.6, -0.4, 180deg);
+  }
+
+  32% {
+    transform: translate(-50%, -50%) rotate3d(-0.85, -0.42, 0.73, 180deg);
+  }
+
+  48% {
+    transform: translate(-50%, -50%) rotate3d(-0.8, 0.3, -0.75, 180deg);
+  }
+
+  64% {
+    transform: translate(-50%, -50%) rotate3d(0.3, 0.45, 0.9, 180deg);
+  }
+
+  80% {
+    transform: translate(-50%, -50%) rotate3d(-0.16, 0.6, 0.18, 180deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate3d(-0.1, 0.3, -1, 180deg);
+  }
+}
+
+.game-card-bg {
+  position: absolute;
+  left: 50%;
+  bottom: -30px;
+  width: 135%;
+  height: auto;
+  max-width: 280px;
+  opacity: 0.75;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.45));
+  mix-blend-mode: normal;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.game-card:hover .game-card-bg {
+  transform: translateX(-50%) scale(1.17);
+  opacity: 0.9;
+}
+
+.domino-card .domino-tiles {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 55%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.domino-card .domino-tile {
+  position: absolute;
+  height: auto;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.45));
+  user-select: none;
+  transition: transform 0.35s cubic-bezier(.2, .9, .2, 1), filter 0.35s ease, left 0.35s ease, bottom 0.35s ease, width 0.35s ease;
+}
+
+.domino-card .domino-tile--primary {
+  width: clamp(48px, 5.1vw, 78px);
+  left: 32%;
+  bottom: 26%;
+  transform: translateX(-50%) rotate(-16deg);
+}
+
+.domino-card .domino-tile--secondary {
+  width: clamp(38px, 4.1vw, 60px);
+  left: 78%;
+  bottom: 58%;
+  transform: translateX(-50%) rotate(24deg);
+  opacity: 0.95;
+}
+
+.domino-card:hover .domino-tile--primary {
+  left: 76%;
+  bottom: 62%;
+  transform: translateX(-50%) rotate(-16deg) scale(1.04);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.55));
+  width: clamp(38px, 4.1vw, 60px);
+}
+
+.domino-card:hover .domino-tile--secondary {
+  left: 32%;
+  bottom: 26%;
+  transform: translateX(-50%) rotate(24deg) scale(1.04);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.55));
+  width: clamp(48px, 5.1vw, 78px);
+}
+
+.okey-card .okey-tiles {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 58%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.okey-card .okey-tile {
+  position: absolute;
+  width: 69px;
+  height: 98px;
+  background: linear-gradient(145deg, #dac49d, #f9e4c3);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.45),
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.18);
+  user-select: none;
+  gap: 7px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, left 0.35s ease, top 0.35s ease;
+}
+
+.okey-card .okey-tile::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 2px;
+  opacity: 0.35;
+  box-shadow:
+    0 0 12px rgba(255, 215, 120, 0.45),
+    0 0 28px rgba(255, 180, 70, 0.28);
+  transition: opacity 0.25s ease;
+  animation: okey-gold-pulse 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.okey-card .okey-tile::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 2px;
+  background: linear-gradient(120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 248, 220, 0.55) 45%,
+      rgba(255, 255, 255, 0) 60%);
+  opacity: 0.25;
+  transform: translateX(-140%);
+  transition: opacity 0.25s ease;
+  animation: okey-shine-idle 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.okey-card .okey-tile.green {
+  color: #1b8b4b;
+}
+
+.okey-card .okey-tile.joker {
+  background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+}
+
+.okey-card .tile-number {
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.okey-card .tile-color-dot-container {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #e6ddd0;
+  box-shadow:
+    inset 1px 2px 4px rgba(0, 0, 0, 0.15),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.okey-card .tile-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.okey-card .tile-joker-star {
+  font-size: 34px;
+  color: #27ae60;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
+  margin-bottom: 2px;
+}
+
+.okey-card .okey-tile:nth-child(1) {
+  left: 30%;
+  top: 30%;
+  transform: translateX(-50%);
+  animation: okey-float-1 3.8s ease-in-out infinite;
+}
+
+.okey-card .okey-tile:nth-child(2) {
+  left: 68%;
+  top: 12%;
+  transform: translateX(-50%);
+  animation: okey-float-2 4.4s ease-in-out infinite;
+}
+
+.okey-card:hover .okey-tile:nth-child(1) {
+  left: 68%;
+  top: 12%;
+  transform: translateX(-50%) scale(1.06);
+}
+
+.okey-card:hover .okey-tile:nth-child(2) {
+  left: 30%;
+  top: 30%;
+  transform: translateX(-50%) scale(1.06);
+}
+
+.okey-card:hover .okey-tile {
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(255, 215, 120, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+  animation-play-state: paused;
+}
+
+.okey-card:hover .okey-tile::before {
+  opacity: 1;
+  animation: okey-gold-pulse 1.6s ease-in-out infinite;
+}
+
+.okey-card:hover .okey-tile::after {
+  opacity: 0.9;
+  animation: okey-shine 1.2s ease-in-out infinite;
+}
+
+@keyframes okey-float-1 {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-6px);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes okey-float-2 {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes okey-gold-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes okey-shine {
+  0% {
+    transform: translateX(-140%);
+  }
+
+  60% {
+    transform: translateX(140%);
+  }
+
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+@keyframes okey-shine-idle {
+  0% {
+    transform: translateX(-140%);
+  }
+
+  25% {
+    transform: translateX(-140%);
+  }
+
+  60% {
+    transform: translateX(140%);
+  }
+
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+.game-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(115deg,
+      rgba(255, 233, 176, 0) 0%,
+      rgba(255, 233, 176, 0.16) 45%,
+      rgba(255, 233, 176, 0.45) 50%,
+      rgba(255, 233, 176, 0.16) 55%,
+      rgba(255, 233, 176, 0) 100%);
+  opacity: 0;
+  transform: translateX(-60%) rotate(25deg);
+  transition: opacity 0.35s ease, transform 0.7s ease;
+  pointer-events: none;
+}
+
+
+
+.game-card:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.6),
+    0 10px 36px rgba(255, 215, 0, 0.18);
+  background:
+    linear-gradient(177deg, #013a2f, #00110d) padding-box,
+    linear-gradient(#f2d07a, #b07b1c) border-box;
+}
+
+.game-card:hover::before {
+  opacity: 0.7;
+  transform: translateX(60%) rotate(25deg);
+}
+
+.game-art {
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: linear-gradient(135deg, rgba(255, 215, 0, 0.04), rgba(224,224,224,0.015)); */
+  border-radius: 17px;
+  /* box-shadow: inset 0 -6px 18px rgba(0, 0, 0, 0.25); */
+}
+
+.game-card h3 {
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+  order: -2;
+  text-align: center;
+  font-size: clamp(16px, 1.7vw, 22px);
+  font-weight: 800;
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  color: #f6d77a;
+  letter-spacing: 0.6px;
+  margin: 20px 6px 0;
+  text-shadow:
+    0 0 5px rgba(132, 84, 8, 0.9),
+    0 0 12px rgba(132, 84, 8, 0.7),
+    0 0 22px rgba(90, 52, 6, 0.45);
+}
+
+.game-players {
+  order: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: clamp(12px, 1.15vw, 15px);
+  font-weight: 700;
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  color: #f0cc74;
+  letter-spacing: 0.4px;
+  text-shadow:
+    0 0 6px rgba(126, 78, 8, 0.6),
+    0 0 14px rgba(90, 52, 6, 0.35);
+  margin-top: 8px;
+}
+
+.game-players .player-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.game-players .player-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.game-players .player-count {
+  line-height: 1;
+}
+
+.seka-card .seka-cards {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 100%;
+  height: 56%;
+  transform: translateX(-50%);
+  perspective: 700px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.seka-card .seka-hand-card {
+  --seka-card-w: clamp(54px, 5.6vw, 88px);
+  position: absolute;
+  width: var(--seka-card-w);
+  height: auto;
+  transform-style: preserve-3d;
+  filter:
+    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 10px rgba(255, 215, 120, 0.25));
+  transition: transform 0.45s cubic-bezier(.2, .9, .2, 1), filter 0.45s ease;
+}
+
+.seka-card .seka-hand-card--left {
+  left: 34%;
+  top: 8%;
+  transform: translateX(-50%) rotateZ(-18deg);
+  z-index: 2;
+}
+
+.seka-card .seka-hand-card--center {
+  left: 50%;
+  top: 0%;
+  transform: translateX(-50%) rotateZ(-2deg);
+  z-index: 3;
+}
+
+.seka-card .seka-hand-card--right {
+  left: 66%;
+  top: 10%;
+  transform: translateX(-50%) rotateZ(16deg);
+  z-index: 1;
+}
+
+.seka-card .seka-card-inner {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(.2, .9, .2, 1);
+}
+
+.seka-card .seka-face {
+  width: 100%;
+  height: auto;
+  display: block;
+  backface-visibility: hidden;
+}
+
+.seka-card .seka-front {
+  transform: translateZ(1px);
+}
+
+.seka-card .seka-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+.seka-card .seka-face--static {
+  transform: translateZ(1px);
+}
+
+.seka-card:hover .seka-hand-card--flip .seka-card-inner {
+  transform: rotateY(180deg);
+}
+
+.seka-card:hover .seka-hand-card {
+  filter:
+    drop-shadow(0 14px 22px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 18px rgba(255, 215, 120, 0.35));
+}
+
+.seka-card:hover .seka-hand-card--left {
+  transform: translateX(-50%) rotateZ(-22deg) translateY(-4px);
+}
+
+.seka-card:hover .seka-hand-card--center {
+  transform: translateX(-50%) rotateZ(0deg) translateY(-6px);
+}
+
+.seka-card:hover .seka-hand-card--right {
+  transform: translateX(-50%) rotateZ(20deg) translateY(-4px);
+}
+
+.poker-card .poker-hand {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  width: 100%;
+  height: 60%;
+  transform: translateX(-50%);
+  perspective: 800px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.poker-card .poker-card {
+  --poker-card-w: clamp(52px, 5.2vw, 82px);
+  position: absolute;
+  width: var(--poker-card-w);
+  height: auto;
+  transform-style: preserve-3d;
+  filter:
+    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 12px rgba(255, 215, 120, 0.25));
+  transition: transform 0.55s cubic-bezier(.2, .9, .2, 1), filter 0.55s ease;
+}
+
+.poker-card .poker-card--left {
+  left: 42%;
+  top: 12%;
+  transform: translateX(-50%) rotateZ(-12deg);
+}
+
+.poker-card .poker-card--right {
+  left: 62%;
+  top: 18%;
+  transform: translateX(-50%) rotateZ(12deg);
+}
+
+.poker-card .poker-card-inner {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.2, .9, .2, 1);
+  will-change: transform;
+}
+
+.poker-card .poker-card--left .poker-card-inner {
+  transition-delay: 0.05s;
+}
+
+.poker-card .poker-card--right .poker-card-inner {
+  transition-delay: 0.12s;
+}
+
+.poker-card .poker-face {
+  width: 100%;
+  height: auto;
+  display: block;
+  backface-visibility: hidden;
+}
+
+.poker-card .poker-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+.poker-card .poker-front {
+  transform: translateZ(1px);
+}
+
+.poker-card .poker-chip {
+  position: absolute;
+  width: clamp(26px, 2.9vw, 40px);
+  height: auto;
+  filter:
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 10px rgba(255, 215, 120, 0.2));
+  transition: transform 0.55s cubic-bezier(.2, .9, .2, 1), filter 0.55s ease, opacity 0.55s ease;
+}
+
+.poker-card .poker-chip--center {
+  left: 36%;
+  bottom: 18%;
+  transform: translateX(-50%) rotateZ(0deg) scale(0.92);
+  opacity: 1;
+  z-index: 3;
+}
+
+.poker-card .poker-chip--left {
+  left: 28%;
+  bottom: 12%;
+  transform: translateX(-50%) rotateZ(-16deg) scale(0.9);
+  opacity: 1;
+  z-index: 2;
+}
+
+.poker-card .poker-chip--right {
+  left: 44%;
+  bottom: 12%;
+  transform: translateX(-50%) rotateZ(16deg) scale(0.9);
+  opacity: 1;
+  z-index: 1;
+}
+
+.poker-card:hover .poker-card--left .poker-card-inner {
+  transform: rotateY(180deg) rotateZ(-4deg);
+}
+
+.poker-card:hover .poker-card--right .poker-card-inner {
+  transform: rotateY(180deg) rotateZ(4deg);
+}
+
+
+.poker-card:hover .poker-card {
+  filter:
+    drop-shadow(0 14px 22px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(255, 215, 120, 0.35));
+}
+
+.poker-card:hover .poker-chip--center {
+  transform: translateX(-50%) translateY(-16px) scale(1.08);
+}
+
+.poker-card:hover .poker-chip--left {
+  transform: translateX(-50%) translate(-16px, -12px) rotateZ(-20deg) scale(1.06);
+}
+
+.poker-card:hover .poker-chip--right {
+  transform: translateX(-50%) translate(16px, -12px) rotateZ(20deg) scale(1.06);
+}
+
+.durak-card .durak-stacks {
+  position: absolute;
+  left: 27%;
+  bottom: 18px;
+  width: 100%;
+  height: 62%;
+  transform: translateX(-50%);
+  perspective: 800px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.durak-card .durak-stack {
+  position: absolute;
+  width: clamp(42px, 4.4vw, 66px);
+  height: clamp(58px, 6.2vw, 90px);
+  transform-style: preserve-3d;
+}
+
+.durak-card .durak-stack--left {
+  left: 30%;
+  top: 14%;
+}
+
+.durak-card .durak-stack--right {
+  left: 82%;
+  top: 14%;
+}
+
+.durak-card .durak-stack-card {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.2, .9, .2, 1);
+  filter:
+    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 10px rgba(255, 215, 120, 0.2));
+  --dx: 0px;
+  --dy: 0px;
+  --rot: 0deg;
+  --rot-hover: 0deg;
+  --hx: 0px;
+  --hy: 0px;
+}
+
+.durak-card .durak-stack-card:nth-child(1) {
+  --dx: -4px;
+  --dy: -2px;
+  --rot: 0deg;
+  --rot-hover: -8deg;
+  z-index: 1;
+}
+
+.durak-card .durak-stack-card:nth-child(2) {
+  --dx: 6px;
+  --dy: 4px;
+  --rot: 2deg;
+  --rot-hover: 8deg;
+  z-index: 3;
+}
+
+.durak-card .durak-stack-card {
+  transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+}
+
+.durak-card .durak-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.2, .9, .2, 1);
+}
+
+.durak-card .durak-face {
+  width: 100%;
+  height: 100%;
+  display: block;
+  backface-visibility: hidden;
+}
+
+.durak-card .durak-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+.durak-card .durak-front {
+  transform: translateZ(1px);
+}
+
+.durak-card:hover .durak-card-inner {
+  transform: rotateY(180deg);
+}
+
+.durak-card .durak-stack--left .durak-stack-card:nth-child(1) {
+  --hx: clamp(68px, 7.5vw, 110px);
+  --hy: -10px;
+}
+
+.durak-card .durak-stack--left .durak-stack-card:nth-child(2) {
+  --hx: clamp(86px, 9vw, 130px);
+  --hy: -20px;
+}
+
+.durak-card .durak-stack--right .durak-stack-card:nth-child(1) {
+  --hx: clamp(90px, 9.5vw, 140px);
+  --hy: -14px;
+}
+
+.durak-card .durak-stack--right .durak-stack-card:nth-child(2) {
+  --hx: clamp(108px, 11vw, 160px);
+  --hy: -24px;
+}
+
+.durak-card:hover .durak-stack-card {
+  transform: translate(calc(var(--dx) + var(--hx)), calc(var(--dy) + var(--hy))) rotate(var(--rot-hover));
+}
+
+.loto-card .loto-layout {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  width: 100%;
+  height: 62%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.loto-card .loto-cards {
+  position: absolute;
+  left: 50%;
+  top: -18%;
+  transform: translateX(-50%);
+  width: 56%;
+  height: 48%;
+}
+
+.loto-card .loto-card-img {
+  position: absolute;
+  width: clamp(70px, 7.6vw, 120px);
+  height: auto;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+}
+
+.loto-card .loto-card-img--back {
+  left: 40%;
+  top: 6%;
+  transform: translateX(-50%) rotate(-8deg);
+  opacity: 0.9;
+}
+
+.loto-card .loto-card-img--front {
+  left: 56%;
+  top: 10%;
+  transform: translateX(-50%) rotate(6deg);
+}
+
+.loto-card .loto-tiles {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  width: 100%;
+  height: 52%;
+  transform: translateX(-50%);
+}
+
+.loto-card .loto-tile {
+  position: absolute;
+  width: clamp(26px, 2.8vw, 40px);
+  height: auto;
+  display: grid;
+  place-items: center;
+  filter:
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 10px rgba(255, 215, 120, 0.2));
+  transition: transform 0.45s cubic-bezier(.2, .9, .2, 1);
+}
+
+.loto-card .loto-tile img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.loto-card .loto-tile-number {
+  position: absolute;
+  font-size: clamp(12px, 1.3vw, 18px);
+  font-weight: 800;
+  color: #4b2b13;
+  text-shadow: 0 1px 0 rgba(255, 235, 200, 0.7), 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.loto-card .loto-tile:nth-child(1) {
+  left: 28%;
+  top: 16%;
+  transform: translateX(-50%) rotate(-6deg);
+}
+
+.loto-card .loto-tile:nth-child(2) {
+  left: 44%;
+  top: 6%;
+  transform: translateX(-50%) rotate(4deg);
+}
+
+.loto-card .loto-tile:nth-child(3) {
+  left: 60%;
+  top: 12%;
+  transform: translateX(-50%) rotate(8deg);
+}
+
+.loto-card .loto-tile:nth-child(4) {
+  left: 38%;
+  top: 32%;
+  transform: translateX(-50%) rotate(-4deg);
+}
+
+.loto-card .loto-tile:nth-child(5) {
+  left: 54%;
+  top: 30%;
+  transform: translateX(-50%) rotate(6deg);
+}
+
+.loto-card .loto-tile:nth-child(6) {
+  left: 72%;
+  top: 28%;
+  transform: translateX(-50%) rotate(12deg);
+}
+
+.loto-card .loto-tile:nth-child(7) {
+  left: 64%;
+  top: 44%;
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.loto-card .loto-sack {
+  position: absolute;
+  left: 22%;
+  bottom: 0;
+  width: clamp(60px, 6.4vw, 90px);
+  height: auto;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+  animation: loto-sack-bob 3.6s ease-in-out infinite;
+}
+
+.loto-card:hover .loto-card-img--back {
+  transform: translateX(-50%) rotate(-12deg) translateY(-4px);
+}
+
+.loto-card:hover .loto-card-img--front {
+  transform: translateX(-50%) rotate(10deg) translateY(-6px);
+}
+
+.loto-card:hover .loto-tile {
+  transform: translateX(-50%) translateY(-6px) rotate(var(--rot, 0deg)) scale(1.05);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(1) {
+  transform: translateX(-50%) translate(-8px, -10px) rotate(-10deg) scale(1.06);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(2) {
+  transform: translateX(-50%) translate(0, -12px) rotate(8deg) scale(1.06);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(3) {
+  transform: translateX(-50%) translate(10px, -10px) rotate(12deg) scale(1.06);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(4) {
+  transform: translateX(-50%) translate(-12px, -6px) rotate(-6deg) scale(1.04);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(5) {
+  transform: translateX(-50%) translate(6px, -8px) rotate(10deg) scale(1.05);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(6) {
+  transform: translateX(-50%) translate(12px, -6px) rotate(16deg) scale(1.04);
+}
+
+.loto-card:hover .loto-tiles .loto-tile:nth-child(7) {
+  transform: translateX(-50%) translate(4px, -12px) rotate(-12deg) scale(1.06);
+}
+
+@keyframes loto-sack-bob {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.poker-card:hover .poker-card--left {
+  transform: translateX(-50%) rotateZ(-24deg) translate(-10px, -10px) scale(1.02);
+}
+
+.poker-card:hover .poker-card--right {
+  transform: translateX(-50%) rotateZ(24deg) translate(10px, -12px) scale(1.02);
+}
+
+.game-svg {
+  width: 77%;
+  height: 77%;
+  opacity: 0.97;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-svg {
+  transform: scale(1.05);
+}
+
+.game-image {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* focus styles for accessibility */
+.game-card:focus-within {
+  outline: 3px solid rgba(255, 215, 0, 0.08);
+}
+
+@media (max-width:1467px) {
+  .game-card {
+    height: 360px;
+    width: 137px;
+  }
+
+  .game-card h3.backgammon-title--en {
+    font-size: clamp(10px, 1vw, 12px);
+  }
+
+  .domino-card .domino-tiles {
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: center bottom;
+  }
+
+  .okey-card .okey-tiles {
+    transform: translateX(-50%) scale(0.9);
+    transform-origin: center top;
+  }
+
+  .seka-card .seka-cards {
+    transform: translateX(-50%) scale(0.9);
+    transform-origin: center top;
+  }
+
+  .poker-card .poker-hand {
+    transform: translateX(-50%) scale(0.9);
+    transform-origin: center top;
+  }
+
+  .durak-card .durak-stacks {
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: center top;
+  }
+}
+
+@media (max-width:1177px) {
+  .game-card {
+    height: 280px;
+    width: 110px;
+  }
+
+  .okey-card .okey-tiles {
+    transform: translateX(-50%) scale(0.78);
+    transform-origin: center top;
+  }
+
+  .okey-card .tile-number,
+  .okey-card .tile-joker-star,
+  .okey-card .tile-color-dot-container {
+    transform: none;
+  }
+
+  .backgammon-card .dice {
+    --dice-size: clamp(22px, 2.3vw, 30px);
+  }
+
+  .loto-card .loto-cards {
+    top: 10%;
+  }
+}
+
+@media (max-width:987px) {
+  .games-page {
+    margin: 37px 0;
+    gap: 7px;
+    flex-direction: column;
+  }
+
+  .game-card {
+    width: 707px !important;
+    height: 117px !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+  }
+
+  .game-art {
+    height: 177px
+  }
+
+  .game-card h3 {
+    align-self: flex-start;
+    text-align: left;
+    font-size: 22px;
+    font-weight: 800;
+    margin: 4px 0 0;
+  }
+
+  .game-card h3.backgammon-title--en {
+    font-size: 22px;
+  }
+
+  .game-players {
+    align-self: flex-end;
+    justify-content: flex-start;
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0 0 4px;
+    position: absolute;
+    left: 14px !important;
+    right: auto !important;
+    bottom: 10px;
+    text-align: left;
+  }
+
+  .game-card>.game-players {
+    position: absolute !important;
+    left: 14px !important;
+    right: auto !important;
+  }
+
+  .game-card-bg {
+    left: auto;
+    right: -10px;
+    bottom: -28px;
+    transform: none;
+  }
+
+  .domino-card .domino-tiles,
+  .okey-card .okey-tiles,
+  .seka-card .seka-cards,
+  .poker-card .poker-hand,
+  .durak-card .durak-stacks,
+  .loto-card .loto-layout,
+  .backgammon-card .backgammon-dice,
+  .backgammon-card .backgammon-bg {
+    left: auto;
+    right: 16px;
+    transform: none;
+  }
+
+  .loto-card .loto-cards {
+    top: -10%;
+  }
+
+  .backgammon-card .backgammon-dice {
+    bottom: 8px;
+  }
+
+  .backgammon-card .backgammon-bg {
+    bottom: 4px;
+  }
+
+  .domino-card .domino-tiles {
+    bottom: -6px;
+  }
+
+  .okey-card .okey-tiles {
+    top: 6px;
+    right: 8px;
+  }
+
+  .okey-card .okey-tile:nth-child(1) {
+    left: 58%;
+    top: 20%;
+  }
+
+  .okey-card .okey-tile:nth-child(2) {
+    left: 78%;
+    top: 12%;
+  }
+
+  .seka-card .seka-cards,
+  .poker-card .poker-hand,
+  .durak-card .durak-stacks,
+  .loto-card .loto-layout {
+    bottom: 0;
+  }
+
+  .seka-card .seka-hand-card {
+    --seka-card-w: clamp(60px, 10vw, 90px);
+  }
+
+  .seka-card .seka-hand-card--left {
+    left: 42%;
+    top: 6%;
+    transform: translateX(-50%) rotateZ(-16deg);
+  }
+
+  .seka-card .seka-hand-card--center {
+    left: 52%;
+    top: 2%;
+    transform: translateX(-50%) rotateZ(-2deg);
+  }
+
+  .seka-card .seka-hand-card--right {
+    left: 62%;
+    top: 8%;
+    transform: translateX(-50%) rotateZ(14deg);
+  }
+
+  .poker-card .poker-card--left {
+    top: 0%;
+    left: 52%;
+    transform: translateX(-50%) rotateZ(-6deg);
+  }
+
+  .poker-card .poker-card--right {
+    top: 0%;
+    left: 62%;
+    transform: translateX(-50%) rotateZ(6deg);
+  }
+
+  .poker-card .poker-card {
+    --poker-card-w: clamp(60px, 10vw, 96px);
+  }
+
+  .poker-card .poker-chip--center {
+    left: 34%;
+    bottom: 30%;
+  }
+
+  .poker-card .poker-chip--left {
+    left: 30%;
+    bottom: 26%;
+  }
+
+  .poker-card .poker-chip--right {
+    left: 38%;
+    bottom: 26%;
+  }
+
+  .poker-card .poker-chip {
+    width: clamp(30px, 3.6vw, 46px);
+  }
+
+  .backgammon-card .backgammon-bg {
+    width: 80%;
+    max-width: 140px;
+  }
+
+  .backgammon-card .backgammon-dice {
+    right: 12px;
+    bottom: 6px;
+  }
+
+  .backgammon-card .dice {
+    --dice-size: clamp(20px, 2vw, 26px);
+  }
+
+  .backgammon-card .dice-wrap--left {
+    left: 48%;
+    top: 12%;
+  }
+
+  .backgammon-card .dice-wrap--right {
+    left: 58%;
+    top: 30%;
+  }
+
+  .loto-card .loto-card-img {
+    width: clamp(96px, 12vw, 180px);
+  }
+
+  .domino-card .domino-tile--primary {
+    left: 46%;
+    bottom: 22%;
+  }
+
+  .domino-card .domino-tile--secondary {
+    left: 64%;
+    bottom: 44%;
+  }
+
+  .durak-card .durak-stack {
+    width: clamp(64px, 9vw, 110px);
+    height: clamp(88px, 12vw, 140px);
+  }
+
+  .durak-card .durak-stack--left {
+    left: 50%;
+    top: -2%;
+  }
+
+  .durak-card .durak-stack--right {
+    left: 82%;
+    top: -2%;
+  }
+
+  .durak-card .durak-stack-card:nth-child(1) {
+    --dx: -2px;
+    --dy: -1px;
+  }
+
+  .durak-card .durak-stack-card:nth-child(2) {
+    --dx: 8px;
+    --dy: 2px;
+  }
+
+  /* .game-svg {
+    width: 78%;
+    height: 78%
+  } */
+}
+
+@media (max-width:777px) {
+  .game-card {
+    width: 500px !important;
+    height: 110px !important;
+    transform: skewX(-7deg) !important;
+  }
+
+  .loto-card .loto-sack {
+    left: auto;
+    right: 12px;
+  }
+}
+
+@media (max-width:597px) {
+  .game-card {
+    width: 347px !important;
+    height: 110px !important;
+    transform: skewX(-7deg) !important;
+  }
+
+  .games-page {
+    gap: 7px;
+  }
+
+  .game-card {
+    gap: 0;
+  }
+
+  .game-art {
+    height: 107px
+  }
+
+  .game-svg {
+    width: 86%;
+    height: 86%
+  }
+
+  .seka-card .seka-hand-card--left {
+    left: 58%;
+  }
+
+  .seka-card .seka-hand-card--center {
+    left: 68%;
+  }
+
+  .seka-card .seka-hand-card--right {
+    left: 78%;
+  }
+
+  .okey-card .okey-tiles {
+    transform: scale(0.8);
+    transform-origin: center top;
+    top: 17px;
+    right: 17px;
+  }
+
+  .poker-card .poker-chip--center,
+  .poker-card .poker-chip--left,
+  .poker-card .poker-chip--right {
+    left: 76%;
+  }
+
+  .backgammon-card .backgammon-bg {
+    width: 70%;
+    max-width: 120px;
+  }
+
+  .backgammon-card:hover .backgammon-bg {
+    right: -4px;
+  }
+
+  .loto-card .loto-tiles {
+    right: -7px;
+    left: auto;
+    transform: none;
+    width: 77%;
+  }
+
+  .loto-card .loto-tile {
+    width: clamp(20px, 3vw, 30px);
+  }
+
+  .loto-card .loto-tile-number {
+    font-size: clamp(10px, 1.6vw, 14px);
+  }
+
+  .domino-card .domino-tile--primary {
+    left: 62%;
+  }
+
+  .domino-card .domino-tile--secondary {
+    left: 78%;
+  }
+
+  .domino-card:hover .domino-tile--primary {
+    left: 78%;
+  }
+
+  .domino-card:hover .domino-tile--secondary {
+    left: 62%;
+  }
+
+}
+
+@media (max-width:427px) {
+  .game-card {
+    width: 277px !important;
+    height: 110px !important;
+    transform: skewX(-7deg) !important;
+  }
+
+  .backgammon-card:hover .backgammon-bg {
+    transform: none;
+  }
+
+  .okey-card .okey-tiles {
+    transform: scale(0.7);
+    transform-origin: center top;
+    top: 17px;
+    right: -17px;
+  }
+
+  .okey-card .okey-tile:nth-child(1) {
+    left: 48%;
+    top: 20%;
+  }
+
+  .poker-hand {
+    right: -17px !important;
+  }
+
+  .loto-card .loto-tiles {
+    width: 67%;
+  }
+}
+
+@media (max-width:317px) {
+  .game-card {
+    width: 227px !important;
+    height: 97px !important;
+    transform: skewX(-7deg) !important;
+  }
+
+  .game-players {
+    font-size: 11px;
+  }
+
+  .backgammon-card .backgammon-bg {
+    width: 60%;
+    max-width: 100px;
+  }
+
+  .game-card h3.backgammon-title--en {
+    font-size: 17px;
+  }
+
+  .domino-card .domino-tiles {
+    right: 5px;
+  }
+  .seka-card .seka-cards {
+    right: 7px;
+  }
+  .loto-card .loto-tiles {
+    width: 57%;
+  }
+}

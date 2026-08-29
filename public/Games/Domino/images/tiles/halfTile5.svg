@@ -1,0 +1,86 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 491" width="500" height="491">
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,340,101.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g2" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,366.5,92.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g3" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,200,244.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g4" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,226.5,235.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g5" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,60,389.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g6" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,86.5,380.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g7" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,59,99.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g8" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,85.5,90.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+		<linearGradient id="g9" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(100,0,0,100,341,389.64)">
+			<stop offset="0" stop-color="#000000"/>
+			<stop offset=".245" stop-color="#000000"/>
+			<stop offset=".293" stop-color="#000000"/>
+			<stop offset="1" stop-color="#7e7e7e"/>
+			<stop offset="1.028" stop-color="#ffffff"/>
+		</linearGradient>
+		<linearGradient id="g10" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(47,18.989,-18.989,47,367.5,380.145)">
+			<stop offset="0" stop-color="#1b1b1b"/>
+			<stop offset=".99" stop-color="#666666"/>
+			<stop offset="1" stop-color="#666666"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1);stroke: url(#g2);stroke-miterlimit:100;stroke-width: 12 } 
+		.s1 { fill: url(#g3);stroke: url(#g4);stroke-miterlimit:100;stroke-width: 12 } 
+		.s2 { fill: url(#g5);stroke: url(#g6);stroke-miterlimit:100;stroke-width: 12 } 
+		.s3 { fill: url(#g7);stroke: url(#g8);stroke-miterlimit:100;stroke-width: 12 } 
+		.s4 { fill: url(#g9);stroke: url(#g10);stroke-miterlimit:100;stroke-width: 12 } 
+	</style>
+	<g id="layer2">
+		<path id="circle10" class="s0" d="m390 151.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+	</g>
+	<g id="layer2 copy 3">
+		<path id="circle10" class="s1" d="m250 294.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+	</g>
+	<g id="layer2">
+		<path id="circle10" class="s2" d="m110 439.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+	</g>
+	<g id="layer2 copy">
+		<path id="circle10" class="s3" d="m109 149.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+	</g>
+	<g id="layer2 copy 2">
+		<path id="circle10" class="s4" d="m391 439.64c-27.65 0-50-22.35-50-50 0-27.65 22.35-50 50-50 27.65 0 50 22.35 50 50 0 27.65-22.35 50-50 50z"/>
+	</g>
+</svg>

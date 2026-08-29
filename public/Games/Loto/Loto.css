@@ -1,0 +1,2247 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    margin: 0 0 107px 0;
+}
+
+.loto-game-container {
+    margin: 57px 0 20px 0;
+}
+
+/* ==================== TOP BAR ==================== */
+.top-bar-game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: clamp(15px, 3vw, 20px);
+    flex-wrap: wrap;
+    gap: clamp(10px, 2vw, 15px);
+    padding: 0 clamp(10px, 3vw, 20px);
+}
+
+.top-bar-side {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+
+.top-bar-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: clamp(10px, 2vw, 15px);
+}
+
+
+
+.win-rule-badge {
+    box-sizing: border-box;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 38%),
+        radial-gradient(circle at 50% 0%, rgba(255, 219, 129, 0.28), transparent 58%),
+        linear-gradient(135deg, #103f2b 0%, #072816 55%, #04170d 100%);
+    padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
+    text-align: center;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 211, 112, 0.8);
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffe9a5;
+    white-space: nowrap;
+    text-shadow: 0 1px 0 rgba(54, 31, 0, 0.75), 0 0 14px rgba(255, 199, 77, 0.42);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 248, 205, 0.35),
+        inset 0 -10px 18px rgba(0, 0, 0, 0.32),
+        0 0 0 1px rgba(78, 47, 9, 0.72),
+        0 10px 24px rgba(0, 0, 0, 0.36),
+        0 0 24px rgba(255, 186, 66, 0.24);
+}
+
+.jackpot-display {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.28em;
+    box-sizing: border-box;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 18% 18%, rgba(255, 248, 191, 0.62), transparent 28%),
+        linear-gradient(135deg, #f8d878 0%, #d99b28 42%, #8b560d 100%);
+    padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 236, 167, 0.9);
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 900;
+    color: #fff6cd;
+    text-shadow: 0 2px 0 rgba(73, 42, 0, 0.85), 0 0 18px rgba(255, 247, 184, 0.52);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.55),
+        inset 0 -11px 18px rgba(94, 50, 0, 0.42),
+        0 0 0 1px rgba(86, 48, 5, 0.72),
+        0 12px 26px rgba(0, 0, 0, 0.4),
+        0 0 34px rgba(255, 186, 66, 0.38);
+    isolation: isolate;
+    overflow: visible;
+    transform-origin: center;
+}
+
+.xgame-coin-icon {
+    width: 1.15em;
+    height: 1.15em;
+    flex: 0 0 auto;
+    object-fit: contain;
+    vertical-align: -0.18em;
+}
+
+.jackpot-display::before,
+.jackpot-display::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+}
+
+.jackpot-display::before {
+    inset: -7px;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 250, 205, 0.92) 0 16%, rgba(255, 207, 76, 0.7) 28%, rgba(255, 153, 35, 0) 68%),
+        conic-gradient(from 20deg, transparent 0 10deg, rgba(255, 250, 186, 0.95) 12deg 18deg, transparent 24deg 48deg, rgba(255, 184, 48, 0.88) 52deg 60deg, transparent 66deg 98deg, rgba(255, 243, 159, 0.92) 104deg 112deg, transparent 118deg 360deg);
+    filter: blur(2px) saturate(135%);
+}
+
+.jackpot-display::after {
+    inset: -3px;
+    z-index: 0;
+    border: 2px solid rgba(255, 246, 183, 0.82);
+    box-shadow:
+        0 0 18px rgba(255, 247, 183, 0.72),
+        0 0 34px rgba(255, 189, 49, 0.64),
+        inset 0 0 16px rgba(255, 251, 210, 0.38);
+}
+
+.jackpot-display.is-jackpot-boost {
+    animation: jackpotBoostPop 780ms cubic-bezier(0.18, 0.9, 0.24, 1);
+}
+
+.jackpot-display.is-jackpot-boost::before {
+    animation: jackpotGlowBurst 980ms ease-out;
+}
+
+.jackpot-display.is-jackpot-boost::after {
+    animation: jackpotRingBurst 820ms ease-out;
+}
+
+.balance-display {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.32em;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 36%),
+        radial-gradient(circle at 85% 0%, rgba(255, 211, 112, 0.22), transparent 45%),
+        linear-gradient(135deg, rgba(14, 74, 48, 0.96), rgba(4, 31, 18, 0.98));
+    padding: clamp(10px, 2vw, 15px) clamp(20px, 4vw, 30px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 211, 112, 0.56);
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 700;
+    text-align: center;
+    color: #fff4c4;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.72), 0 0 12px rgba(255, 199, 77, 0.28);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.26),
+        inset 0 -9px 16px rgba(0, 0, 0, 0.26),
+        0 0 0 1px rgba(4, 14, 9, 0.82),
+        0 9px 22px rgba(0, 0, 0, 0.32),
+        0 0 22px rgba(67, 173, 111, 0.18);
+}
+
+.side-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 33%;
+}
+
+.middle-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 33%;
+    gap: clamp(5px, 1.5vw, 8px);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: clamp(12px, 2vw, 17px) clamp(20px, 3vw, 28px);
+    border-radius: 50px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: clamp(12px, 2vw, 14px);
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+}
+
+.btn-refresh {
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 6px, rgba(0, 0, 0, 0.06) 6px 12px),
+        linear-gradient(135deg, #d2a06b 0%, #b3783f 45%, #8b5a2b 100%);
+    color: #ffffff;
+    border: 1px solid rgba(60, 34, 12, 0.55);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+        0 6px 14px rgba(0, 0, 0, 0.25);
+    padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2vw, 15px);
+    border-radius: clamp(6px, 1vw, 8px);
+    cursor: pointer;
+    font-size: clamp(11px, 2vw, 0.9rem);
+    font-weight: bold;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.btn-refresh:hover {
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 6px, rgba(0, 0, 0, 0.08) 6px 12px),
+        linear-gradient(135deg, #dcb07d 0%, #c1844a 45%, #9a6630 100%);
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 6px, rgba(0, 0, 0, 0.06) 6px 12px),
+        linear-gradient(135deg, #c9895a 0%, #a9623b 45%, #7b4023 100%);
+    color: #ffffff;
+    border: 1px solid rgba(60, 34, 12, 0.55);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+        0 6px 14px rgba(0, 0, 0, 0.25);
+    padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2vw, 15px);
+    border-radius: clamp(6px, 1vw, 8px);
+    cursor: pointer;
+    font-size: clamp(11px, 2vw, 0.9rem);
+    font-weight: bold;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.btn-icon {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+}
+
+.btn-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn-delete:hover {
+    background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 6px, rgba(0, 0, 0, 0.08) 6px 12px),
+        linear-gradient(135deg, #d59a6b 0%, #b86e42 45%, #8a4a29 100%);
+    transform: translateY(-2px);
+}
+
+.btn-refresh:disabled,
+.btn-delete:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ========exitbutton========= */
+.exit-button {
+    position: relative;
+    box-sizing: border-box;
+    padding: clamp(14px, 3vw, 18px) clamp(32px, 6vw, 48px);
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 900;
+    color: #ffeeb8;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 24% 18%, rgba(255, 219, 129, 0.3), transparent 33%),
+        linear-gradient(135deg, #174c31 0%, #0a2e1b 52%, #05190f 100%);
+    border: 1px solid rgba(255, 211, 112, 0.72);
+    border-radius: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.36),
+        inset 0 -10px 16px rgba(0, 0, 0, 0.3),
+        0 8px 0 #5b3909,
+        0 12px 20px rgba(0, 0, 0, 0.4),
+        0 0 28px rgba(255, 188, 64, 0.24);
+    transition: all 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 2px 0 rgba(51, 30, 0, 0.9), 0 0 13px rgba(255, 203, 89, 0.32);
+}
+
+.exit-button:hover {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 24% 18%, rgba(255, 231, 151, 0.36), transparent 33%),
+        linear-gradient(135deg, #1b5a39 0%, #0c3620 52%, #061e12 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.42),
+        inset 0 -10px 16px rgba(0, 0, 0, 0.28),
+        0 6px 0 #5b3909,
+        0 10px 20px rgba(0, 0, 0, 0.4),
+        0 0 38px rgba(255, 198, 78, 0.34);
+    transform: translateY(2px);
+}
+
+.exit-button:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.3),
+        inset 0 -6px 12px rgba(0, 0, 0, 0.36),
+        0 2px 0 #5b3909,
+        0 4px 10px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(255, 188, 64, 0.22);
+    transform: translateY(6px);
+}
+
+.exit-button .icon {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 900;
+}
+
+/* ========autoButton========= */
+.auto-button {
+    position: relative;
+    box-sizing: border-box;
+    padding: clamp(12px, 2.5vw, 16px) clamp(28px, 5.5vw, 40px);
+    font-size: clamp(14px, 2.6vw, 18px);
+    font-weight: 900;
+    color: #fff1b6;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0) 36%),
+        linear-gradient(135deg, #123d2a 0%, #082817 58%, #04160d 100%);
+    border: 1px solid rgba(255, 211, 112, 0.68);
+    border-radius: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.3),
+        inset 0 -9px 15px rgba(0, 0, 0, 0.28),
+        0 7px 0 #533407,
+        0 12px 20px rgba(0, 0, 0, 0.35),
+        0 0 24px rgba(255, 191, 63, 0.22);
+    transition: all 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 2px 0 rgba(47, 28, 0, 0.85), 0 0 11px rgba(255, 204, 88, 0.32);
+}
+
+.auto-button.is-active {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 36%),
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 132, 0.28), transparent 54%),
+        linear-gradient(135deg, #1f6a43 0%, #0e4328 52%, #062414 100%);
+    border-color: rgba(255, 222, 130, 0.82);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.4),
+        inset 0 -9px 15px rgba(0, 0, 0, 0.28),
+        0 7px 0 #5c3a08,
+        0 12px 20px rgba(0, 0, 0, 0.35),
+        0 0 28px rgba(255, 196, 66, 0.32),
+        0 0 18px rgba(48, 222, 126, 0.2);
+}
+
+.auto-button.is-inactive {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 36%),
+        linear-gradient(135deg, #263a32 0%, #16251f 58%, #0a1410 100%);
+    border-color: rgba(180, 156, 97, 0.58);
+    color: #cbbf9a;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.18),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.3),
+        0 6px 0 #342d1b,
+        0 10px 18px rgba(0, 0, 0, 0.3),
+        0 0 18px rgba(159, 142, 95, 0.18);
+}
+
+.auto-button:hover {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 36%),
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 132, 0.18), transparent 54%),
+        linear-gradient(135deg, #174c31 0%, #0b321e 58%, #051a0f 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.38),
+        inset 0 -9px 15px rgba(0, 0, 0, 0.26),
+        0 5px 0 #533407,
+        0 10px 20px rgba(0, 0, 0, 0.35),
+        0 0 32px rgba(255, 195, 70, 0.34);
+    transform: translateY(2px);
+}
+
+.auto-button:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.26),
+        inset 0 -6px 11px rgba(0, 0, 0, 0.34),
+        0 2px 0 #533407,
+        0 4px 10px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(255, 195, 70, 0.24);
+    transform: translateY(6px);
+}
+
+.auto-button.is-active:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.46),
+        inset 0 -9px 15px rgba(0, 0, 0, 0.26),
+        0 5px 0 #5c3a08,
+        0 10px 20px rgba(0, 0, 0, 0.35),
+        0 0 34px rgba(255, 198, 71, 0.42),
+        0 0 19px rgba(48, 222, 126, 0.24);
+    transform: translateY(2px);
+}
+
+.auto-button.is-active:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.3),
+        inset 0 -6px 11px rgba(0, 0, 0, 0.34),
+        0 2px 0 #5c3a08,
+        0 4px 10px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(255, 198, 71, 0.25);
+    transform: translateY(6px);
+}
+
+.auto-button.is-inactive:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.24),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.28),
+        0 5px 0 #342d1b,
+        0 10px 18px rgba(0, 0, 0, 0.3),
+        0 0 22px rgba(174, 152, 94, 0.2);
+    transform: translateY(2px);
+}
+
+.auto-button.is-inactive:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.18),
+        inset 0 -6px 11px rgba(0, 0, 0, 0.34),
+        0 2px 0 #342d1b,
+        0 4px 10px rgba(0, 0, 0, 0.3),
+        0 0 16px rgba(174, 152, 94, 0.16);
+    transform: translateY(6px);
+}
+
+.auto-icon {
+    display: inline-flex;
+    width: clamp(18px, 3.5vw, 22px);
+    height: clamp(18px, 3.5vw, 22px);
+}
+
+.auto-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #ffd66d;
+    stroke: #3d2500;
+    stroke-width: 1.2;
+    filter: drop-shadow(0 0 7px rgba(255, 201, 75, 0.55));
+}
+
+/* ========buyTicketBtn========= */
+.buy-ticket-button {
+    position: relative;
+    box-sizing: border-box;
+    padding: clamp(14px, 3vw, 18px) clamp(32px, 6vw, 48px);
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 900;
+    color: #fff4bf;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 22% 15%, rgba(255, 250, 196, 0.45), transparent 32%),
+        linear-gradient(135deg, #d6a43c 0%, #9f6817 45%, #06301b 100%);
+    border: 1px solid rgba(255, 229, 144, 0.86);
+    border-radius: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.46),
+        inset 0 -10px 16px rgba(77, 41, 0, 0.36),
+        0 8px 0 #6d4308,
+        0 12px 20px rgba(0, 0, 0, 0.4),
+        0 0 32px rgba(255, 198, 72, 0.34);
+    transition: all 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 2px 0 rgba(58, 34, 0, 0.9), 0 0 14px rgba(255, 220, 118, 0.36);
+}
+
+.buy-ticket-button:hover {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 34%),
+        radial-gradient(circle at 22% 15%, rgba(255, 250, 196, 0.52), transparent 32%),
+        linear-gradient(135deg, #e0b14a 0%, #ad741d 45%, #073a20 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.52),
+        inset 0 -10px 16px rgba(77, 41, 0, 0.32),
+        0 6px 0 #6d4308,
+        0 10px 20px rgba(0, 0, 0, 0.4),
+        0 0 42px rgba(255, 204, 79, 0.46);
+    transform: translateY(2px);
+}
+
+.buy-ticket-button:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.34),
+        inset 0 -6px 12px rgba(77, 41, 0, 0.4),
+        0 2px 0 #6d4308,
+        0 4px 10px rgba(0, 0, 0, 0.4),
+        0 0 22px rgba(255, 204, 79, 0.28);
+    transform: translateY(6px);
+}
+
+.buy-ticket-button .icon {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 900;
+}
+
+.buy-ticket-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 34%),
+        linear-gradient(135deg, #5f5131 0%, #46371e 55%, #14241a 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 4px 0 rgba(83, 52, 7, 0.55),
+        0 6px 10px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(255, 209, 102, 0.1);
+    pointer-events: none;
+}
+
+/* ==================== DRAWN NUMBER ==================== */
+.drawn-number {
+    text-align: center;
+    margin-bottom: clamp(20px, 5vw, 30px);
+    padding: 0 clamp(10px, 3vw, 20px);
+}
+
+.big-ball {
+    border: 3px solid transparent;
+    background-color: transparent;
+    background-image: url("../../assets/siteImages/lotoTileTemporary.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: clamp(100px, 25vw, 150px);
+    height: clamp(100px, 25vw, 150px);
+    border-radius: 50%;
+    color: #000;
+    font-size: clamp(48px, 12vw, 72px);
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto clamp(12px, 3vw, 20px);
+    box-shadow: 0 20px 60px rgba(255, 209, 102, 0.3);
+}
+
+/* ==================== HISTORY ==================== */
+.history {
+    display: flex;
+    gap: clamp(6px, 1.5vw, 8px);
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 clamp(10px, 3vw, 20px);
+}
+
+.history-ball {
+    border: 1px solid transparent;
+    background-color: transparent;
+    background-image: url("../../assets/siteImages/lotoTileTemporary.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #000;
+    width: clamp(35px, 8vw, 45px);
+    height: clamp(35px, 8vw, 45px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(12px, 2vw, 14px);
+}
+
+.closest-card-pills.is-hidden {
+    display: none;
+}
+
+.closest-card-pills {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: min(100%, 860px);
+    margin: 12px auto 0;
+    padding: 0 8px;
+    text-align: center;
+}
+
+.closest-card-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background:
+        linear-gradient(180deg, rgba(255, 214, 102, 0.18), rgba(255, 214, 102, 0.05)),
+        rgba(44, 26, 7, 0.86);
+    border: 1px solid rgba(255, 215, 120, 0.48);
+    color: #fff7df;
+    font-size: clamp(12px, 1.8vw, 14px);
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -1px 0 rgba(120, 73, 10, 0.35),
+        0 0 0 1px rgba(255, 209, 102, 0.08),
+        0 8px 18px rgba(0, 0, 0, 0.2),
+        0 0 18px rgba(255, 196, 71, 0.18);
+    text-shadow: 0 1px 6px rgba(70, 36, 2, 0.32);
+    overflow: hidden;
+}
+
+.closest-card-pill::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 28%, transparent 72%, rgba(255, 209, 102, 0.12));
+    pointer-events: none;
+}
+
+.closest-card-pill::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 14px;
+    width: 38%;
+    height: 38%;
+    border-radius: 999px;
+    background: rgba(255, 248, 220, 0.2);
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+.closest-card-pill.is-critical {
+    border-color: rgba(255, 224, 138, 0.7);
+    background:
+        linear-gradient(180deg, rgba(255, 224, 138, 0.24), rgba(255, 224, 138, 0.08)),
+        rgba(58, 31, 6, 0.92);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(143, 89, 16, 0.4),
+        0 0 0 1px rgba(255, 224, 138, 0.14),
+        0 10px 22px rgba(0, 0, 0, 0.22),
+        0 0 24px rgba(255, 196, 71, 0.28);
+}
+
+/* ==================== TICKETS ==================== */
+.tickets-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 90vw, 550px), 1fr));
+    /* gap: clamp(12px, 3vw, 20px);
+     */
+    gap: 0px;
+    margin-top: clamp(20px, 5vw, 30px);
+    padding: 0 clamp(10px, 3vw, 20px);
+}
+
+.ticket {
+    background: transparent;
+    border: none;
+    border-radius: clamp(14px, 3vw, 20px);
+    padding: 5px;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(10px, 2vw, 15px);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ticket-number {
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 900;
+    color: #ffd166;
+}
+
+.ticket-card {
+    background-color: #ffffff;
+    background-image: url("./lotoImages/lotoCardBg.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border: none;
+    /* border-radius: clamp(12px, 3vw, 15px); */
+    padding: 0;
+    margin: 0 0 clamp(10px, 2vw, 15px) 0;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 394 / 141;
+    backdrop-filter: blur(10px);
+}
+
+.ticket-actions {
+    display: flex;
+    gap: clamp(8px, 2vw, 10px);
+    flex-wrap: wrap;
+}
+
+/* ==================== CARD GRID ==================== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 0;
+    padding: 0;
+    position: absolute;
+    inset: 8% 2.8%;
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 1px, transparent 1px);
+    background-size: calc(100% / 9) calc(100% / 3);
+    background-origin: border-box;
+    background-clip: border-box;
+}
+
+.cell {
+    aspect-ratio: 1;
+    background: transparent;
+    /* border-radius: clamp(6px, 1vw, 8px); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(7px, 1.7vw, 14px);
+    transition: all 0.3s;
+    min-width: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #111827;
+    line-height: 1;
+    transform: translateY(-1px);
+}
+
+.cell.blank {
+    background: transparent;
+}
+
+.cell.marked {
+    background-color: transparent;
+    background-image: url("../../assets/siteImages/lotoTileTemporary.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #000;
+    transform: translateY(-1px) scale(0.95);
+}
+
+/* ==================== LINE BUTTONS ==================== */
+.line-btns {
+    display: flex;
+    gap: clamp(6px, 1.5vw, 8px);
+    flex-wrap: wrap;
+}
+
+.line-btn {
+    flex: 1;
+    min-width: clamp(60px, 15vw, 100px);
+    padding: clamp(6px, 1.5vw, 8px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 209, 102, 0.3);
+    border-radius: clamp(6px, 1.5vw, 8px);
+    color: #fff;
+    font-size: clamp(10px, 1.8vw, 12px);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.line-btn:hover:not(:disabled) {
+    background: rgba(255, 209, 102, 0.2);
+    border-color: #ffd166;
+}
+
+.line-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.line-btn.completed {
+    background: linear-gradient(135deg, #6ee7b7, #2dd4bf);
+    color: #000;
+    border-color: #2dd4bf;
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top, rgba(34, 197, 94, 0.12), transparent 30%),
+        rgba(5, 18, 11, 0.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: clamp(10px, 3vw, 20px);
+    backdrop-filter: blur(8px);
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    position: relative;
+    width: min(100%, 560px);
+    background:
+        radial-gradient(circle at top, rgba(255, 214, 102, 0.14), transparent 35%),
+        linear-gradient(180deg, rgba(13, 48, 31, 0.98), rgba(7, 28, 18, 0.98));
+    padding: clamp(22px, 5vw, 36px);
+    border-radius: clamp(20px, 3vw, 28px);
+    text-align: center;
+    max-width: clamp(300px, 92vw, 560px);
+    border: 1px solid rgba(255, 214, 102, 0.48);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(24, 80, 48, 0.4),
+        0 26px 50px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 214, 102, 0.08),
+        0 0 40px rgba(255, 196, 71, 0.16);
+    overflow: hidden;
+}
+
+.modal-content::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 25%, transparent 72%, rgba(255, 214, 102, 0.06)),
+        radial-gradient(circle at top right, rgba(255, 214, 102, 0.08), transparent 22%);
+    pointer-events: none;
+}
+
+.modal-content h2 {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(24px, 6vw, 38px);
+    margin: 0 0 clamp(8px, 3vw, 14px);
+    color: #fff4d0;
+    text-shadow: 0 4px 18px rgba(255, 196, 71, 0.22);
+}
+
+.countdown-timer {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 1;
+    font-size: clamp(18px, 4vw, 22px);
+    color: #ffe08a;
+    font-weight: 900;
+    background: linear-gradient(180deg, rgba(12, 44, 28, 0.96), rgba(7, 25, 16, 0.96));
+    padding: 0;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 214, 102, 0.7);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 0 4px rgba(255, 214, 102, 0.08),
+        0 10px 22px rgba(0, 0, 0, 0.32);
+}
+
+.winner-name {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    margin: 0 0 12px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background:
+        linear-gradient(180deg, rgba(255, 214, 102, 0.12), rgba(255, 214, 102, 0.04)),
+        rgba(8, 25, 16, 0.72);
+    border: 1px solid rgba(255, 214, 102, 0.32);
+    color: #fff8df;
+    font-weight: 900;
+    font-size: clamp(20px, 4vw, 30px);
+    letter-spacing: 0.02em;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.3);
+}
+
+.prize-amount {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.28em;
+    font-size: clamp(28px, 6vw, 40px);
+    color: #ffe08a;
+    font-weight: 900;
+    margin: 0 0 20px 0;
+    text-shadow:
+        0 2px 10px rgba(255, 209, 102, 0.4),
+        0 0 20px rgba(255, 196, 71, 0.18);
+}
+
+.win-type-badge {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    background: linear-gradient(135deg, #f6d365, #d4a017);
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: clamp(15px, 3vw, 18px);
+    color: #16351f;
+    font-weight: 700;
+    margin-bottom: 20px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.winner-card-display {
+    position: relative;
+    z-index: 1;
+    margin-top: 4px;
+    padding: 16px;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 214, 102, 0.26);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+        rgba(5, 20, 12, 0.42);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.winner-card-display h3 {
+    margin: 0 0 12px;
+    color: #ffe08a;
+    font-size: clamp(15px, 3vw, 18px);
+    letter-spacing: 0.03em;
+}
+
+.winner-card-shell {
+    width: 100%;
+    position: relative;
+    aspect-ratio: 394 / 141;
+    background-color: #ffffff;
+    background-image: url("./lotoImages/lotoCardBg.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+
+.winner-card-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    inset: 8% 2.8%;
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.18) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 1px, transparent 1px);
+    background-size: calc(100% / 9) calc(100% / 3);
+    background-origin: border-box;
+    background-clip: border-box;
+}
+
+.winner-cell {
+    aspect-ratio: 1;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: clamp(7px, 1.7vw, 14px);
+    border: none;
+    padding: 0;
+    transition: all 0.3s;
+    min-width: 0;
+    box-sizing: border-box;
+    color: #111827;
+    line-height: 1;
+    transform: translateY(-1px);
+}
+
+.winner-cell.blank {
+    background: transparent;
+    border: none;
+}
+
+.winner-cell.winning,
+.winner-cell.not-drawn {
+    background-color: transparent;
+    background-image: url("../../assets/siteImages/lotoTileTemporary.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #1b1403;
+}
+
+.winner-cell.winning {
+    transform: translateY(-1px) scale(0.95);
+    box-shadow: 0 4px 16px rgba(255, 209, 102, 0.35);
+    animation: winPulse 1s infinite;
+}
+
+.winner-cell.not-drawn {
+    opacity: 0.62;
+}
+
+.winner-modal-btn {
+    position: relative;
+    z-index: 1;
+    margin-top: 20px;
+    font-size: clamp(15px, 3vw, 18px);
+    padding: 14px 34px;
+    background: linear-gradient(135deg, #f6d365, #d4a017);
+    color: #16351f;
+    box-shadow:
+        0 8px 0 #8b6b12,
+        0 16px 26px rgba(0, 0, 0, 0.28),
+        0 0 24px rgba(255, 214, 102, 0.2);
+}
+
+.winner-modal-btn:hover:not(:disabled) {
+    box-shadow:
+        0 6px 0 #8b6b12,
+        0 14px 24px rgba(0, 0, 0, 0.28),
+        0 0 28px rgba(255, 214, 102, 0.3);
+}
+
+.winner-modal-btn:active {
+    box-shadow:
+        0 2px 0 #8b6b12,
+        0 6px 14px rgba(0, 0, 0, 0.24),
+        0 0 18px rgba(255, 214, 102, 0.2);
+}
+
+/* ==================== NOTIFICATION ==================== */
+.notification {
+    position: fixed;
+    top: clamp(10px, 3vw, 20px);
+    right: clamp(10px, 3vw, 20px);
+    background: linear-gradient(135deg, #ffd166, #ff9a3c);
+    color: #000;
+    padding: clamp(12px, 2vw, 16px) clamp(16px, 4vw, 24px);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: clamp(12px, 2vw, 14px);
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    max-width: clamp(200px, 80vw, 400px);
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes winPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes cardFlip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    50% {
+        transform: rotateY(90deg);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+@keyframes jackpotBoostPop {
+    0% {
+        transform: scale(1);
+        filter: brightness(1) saturate(1);
+    }
+
+    26% {
+        transform: scale(1.075);
+        filter: brightness(1.24) saturate(1.22);
+    }
+
+    52% {
+        transform: scale(0.985);
+        filter: brightness(1.08) saturate(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1) saturate(1);
+    }
+}
+
+@keyframes jackpotGlowBurst {
+    0% {
+        opacity: 0;
+        transform: scale(0.82);
+    }
+
+    18% {
+        opacity: 1;
+        transform: scale(1.08) rotate(8deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.72) rotate(26deg);
+    }
+}
+
+@keyframes jackpotRingBurst {
+    0% {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    24% {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.42);
+    }
+}
+
+/* ==================== TABLET RESPONSIVE ==================== */
+@media (max-width: 1012px) {
+    .jackpot-display {
+        font-size: clamp(20px, 4vw, 28px);
+        white-space: nowrap;
+        /* padding: 8px 16px; */
+    }
+
+    .balance-display {
+        font-size: clamp(14px, 3vw, 16px);
+        /* padding: 6px 12px; */
+        white-space: nowrap;
+    }
+
+    .buy-ticket-button {
+        padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px);
+        font-size: clamp(14px, 3vw, 18px);
+        white-space: nowrap;
+    }
+
+    .exit-button,
+    .auto-button {
+        padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px);
+        font-size: clamp(14px, 3vw, 18px);
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 919px) {
+    .jackpot-display {
+        font-size: clamp(20px, 4vw, 28px);
+        /* padding: 8px 16px; */
+    }
+
+    .balance-display {
+        font-size: clamp(14px, 3vw, 16px);
+        /* padding: 6px 12px; */
+    }
+
+    .buy-ticket-button {
+        padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px);
+        font-size: clamp(14px, 3vw, 18px);
+    }
+
+    .exit-button,
+    .auto-button {
+        padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 36px);
+        font-size: clamp(14px, 3vw, 18px);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .top-bar {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .jackpot-display {
+        font-size: clamp(16px, 3.5vw, 24px);
+        padding: 10px 20px;
+    }
+
+    .balance-display {
+        font-size: clamp(12px, 2.5vw, 16px);
+        padding: 8px 16px;
+    }
+
+    .big-ball {
+        width: clamp(90px, 22vw, 130px);
+        height: clamp(90px, 22vw, 130px);
+        font-size: clamp(40px, 10vw, 60px);
+    }
+
+    .history-ball {
+        width: clamp(32px, 7vw, 40px);
+        height: clamp(32px, 7vw, 40px);
+        font-size: clamp(11px, 1.8vw, 13px);
+    }
+
+    .closest-card-pills {
+        gap: 7px;
+    }
+
+    .tickets-container {
+        grid-template-columns: 1fr;
+        /* gap: 15px; */
+    }
+
+    .card-grid {
+        gap: 0;
+    }
+
+    .cell {
+        font-size: clamp(12px, 1.8vw, 15px);
+    }
+
+    .line-btn {
+        font-size: clamp(10px, 1.8vw, 11px);
+        padding: 6px;
+    }
+
+    .modal-content {
+        padding: 17px;
+    }
+
+    .modal-content h2 {
+        font-size: clamp(24px, 5vw, 36px);
+        margin-bottom: 15px;
+    }
+
+    .winner-name {
+        font-size: clamp(18px, 3.7vw, 26px);
+    }
+
+    .winner-card-display {
+        padding: 14px;
+    }
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media (max-width: 480px) {
+    .top-bar {
+        gap: 8px;
+        margin-bottom: 12px;
+        padding: 0 8px;
+    }
+
+    .jackpot-display {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    .balance-display {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .btn {
+        font-size: 11px;
+        padding: 8px 14px;
+    }
+
+    .drawn-number {
+        margin-bottom: 15px;
+        padding: 0 8px;
+    }
+
+    .big-ball {
+        width: clamp(80px, 20vw, 120px);
+        height: clamp(80px, 20vw, 120px);
+        font-size: clamp(36px, 9vw, 50px);
+        margin-bottom: 12px;
+    }
+
+    .history {
+        gap: 5px;
+        padding: 0 8px;
+    }
+
+    .history-ball {
+        width: clamp(30px, 6vw, 36px);
+        height: clamp(30px, 6vw, 36px);
+        font-size: clamp(10px, 1.5vw, 12px);
+    }
+
+    .closest-card-pills {
+        margin-top: 10px;
+        gap: 6px;
+        padding: 0 4px;
+    }
+
+    .closest-card-pill {
+        min-height: 32px;
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+
+    .tickets-container {
+        grid-template-columns: 1fr;
+        /* gap: 12px; */
+        margin-top: 15px;
+        padding: 0 8px;
+    }
+
+    
+
+    .ticket-header {
+        margin-bottom: 10px;
+    }
+
+    .ticket-number {
+        font-size: 14px;
+    }
+
+    .card-grid {
+        gap: 0;
+        margin-bottom: 0;
+    }
+
+    .cell {
+        font-size: clamp(10px, 1.6vw, 13px);
+        border-radius: 5px;
+    }
+
+    .line-btns {
+        gap: 5px;
+    }
+
+    .line-btn {
+        font-size: 9px;
+        padding: 5px;
+        min-width: 55px;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 18px 14px 20px;
+        border-radius: 12px;
+    }
+
+    .modal-content h2 {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    .countdown-timer {
+        top: 12px;
+        right: 12px;
+        width: 46px;
+        height: 46px;
+        font-size: 16px;
+    }
+
+    .winner-name {
+        width: calc(100% - 24px);
+        margin-top: 2px;
+        padding: 9px 14px;
+        font-size: 18px;
+    }
+
+    .win-type-badge {
+        margin-bottom: 14px;
+    }
+
+    .prize-amount {
+        font-size: 30px;
+        margin-bottom: 16px;
+    }
+
+    .notification {
+        font-size: 12px;
+        padding: 10px 14px;
+        border-radius: 10px;
+    }
+
+    .ticket-card {
+        padding: 0;
+        margin: 0 0 8px 0;
+        /* border-radius: 10px; */
+    }
+
+    .ticket-actions {
+        gap: 6px;
+    }
+
+    .btn-refresh,
+    .btn-delete {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+
+    .side-display {
+        gap: 7px;
+    }
+
+    .exit-button{
+        padding: clamp(7px, 2vw, 11px) clamp(17px, 4vw, 20px);
+        font-size: clamp(7px, 3vw, 10px);
+    }
+    .auto-button {
+        padding: 7px 7px;
+        font-size: clamp(7px, 3vw, 10px);
+    }
+
+    .buy-ticket-button {
+        padding: clamp(7px, 2vw, 11px) clamp(17px, 4vw, 20px);
+        font-size: clamp(7px, 3vw, 10px);
+    }
+
+    .win-rule-badge {
+        padding: clamp(7px, 2vw, 11px) clamp(12px, 4vw, 17px);
+        font-size: clamp(7px, 3vw, 9px);
+        width: 50%;
+    }
+
+    #winRuleBadge {
+        width: min(100%, 118px);
+        white-space: normal;
+        line-height: 1.05;
+        overflow-wrap: anywhere;
+        text-wrap: balance;
+    }
+
+    .winner-card-display {
+        padding: 10px;
+    }
+
+    .mute-toggle {
+        font-size: clamp(7px, 1.8vw, 10px);
+        width: 27px;
+        height: 27px !important;
+        padding: 0;
+    }
+
+    .mute-toggle .icon {
+        font-size: clamp(7px, 1.8vw, 10px);
+
+    }
+}
+
+/* ==================== SMALL MOBILE (320px and below) ==================== */
+@media (max-width: 380px) {
+    .winner-card-display {
+        padding: 8px;
+    }
+
+    .exit-button,
+    .auto-button {
+        padding: clamp(7px, 2vw, 11px) clamp(17px, 4vw, 20px);
+        font-size: clamp(7px, 3vw, 8px);
+    }
+
+    .buy-ticket-button {
+        padding: clamp(7px, 2vw, 11px) clamp(17px, 4vw, 20px);
+        font-size: clamp(7px, 3vw, 10px);
+    }
+
+    .win-rule-badge {
+        padding: clamp(7px, 2vw, 11px) clamp(12px, 4vw, 17px);
+        font-size: clamp(7px, 3vw, 9px);
+
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 6px;
+        padding: 0 6px;
+    }
+
+    .jackpot-display {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .balance-display {
+        font-size: 11px;
+        padding: 5px 0px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .big-ball {
+        width: clamp(70px, 18vw, 100px);
+        height: clamp(70px, 18vw, 100px);
+        font-size: clamp(32px, 8vw, 42px);
+    }
+
+    .history-ball {
+        width: clamp(28px, 5vw, 32px);
+        height: clamp(28px, 5vw, 32px);
+        font-size: 10px;
+    }
+
+    .closest-card-pill {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 14px;
+    }
+
+    .tickets-container {
+        /* padding: 0 6px; */
+    }
+
+    .ticket {
+        padding: 10px;
+    }
+
+    .cell {
+        font-size: clamp(10px, 1.5vw, 12px);
+        min-width: clamp(22px, 5vw, 35px);
+    }
+
+    .line-btn {
+        font-size: 8px;
+        padding: 4px;
+        min-width: 50px;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .countdown-timer {
+        width: 42px;
+        height: 42px;
+        font-size: 14px;
+    }
+
+    .winner-name {
+        width: calc(100% - 12px);
+        font-size: 16px;
+        min-height: 42px;
+        padding: 8px 12px;
+    }
+
+    .prize-amount {
+        font-size: 26px;
+    }
+
+    .winner-modal-btn {
+        width: 100%;
+        padding: 12px 18px;
+        font-size: 14px;
+    }
+
+    .notification {
+        font-size: 11px;
+        padding: 8px 12px;
+    }
+
+    .btn-refresh,
+    .btn-delete {
+        padding: 4px 8px;
+        font-size: 9px;
+    }
+}
+
+/* ==================== LANDSCAPE ORIENTATION ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .top-bar {
+        margin-bottom: 8px;
+        gap: 8px;
+    }
+
+    .jackpot-display {
+        font-size: clamp(14px, 3vw, 18px);
+        padding: 6px 14px;
+    }
+
+    .balance-display {
+        font-size: clamp(12px, 2.5vw, 14px);
+        padding: 5px 12px;
+    }
+
+    .drawn-number {
+        margin-bottom: 10px;
+    }
+
+    .big-ball {
+        width: clamp(70px, 15vh, 100px);
+        height: clamp(70px, 15vh, 100px);
+        font-size: clamp(30px, 8vh, 48px);
+    }
+
+    .history-ball {
+        width: clamp(25px, 4vh, 35px);
+        height: clamp(25px, 4vh, 35px);
+        font-size: 10px;
+    }
+
+    .closest-card-pills {
+        margin-top: 8px;
+    }
+
+    .tickets-container {
+        margin-top: 10px;
+        /* gap: 10px; */
+    }
+
+    .card-grid {
+        gap: 0;
+        margin-bottom: 0;
+    }
+
+    .cell {
+        font-size: clamp(9px, 1.4vw, 12px);
+    }
+
+    .line-btn {
+        font-size: 9px;
+        padding: 4px;
+    }
+}
+
+/* ==================== LARGE SCREENS ==================== */
+@media (min-width: 1200px) {
+    .tickets-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==================== EXTRA LARGE SCREENS ==================== */
+@media (min-width: 1600px) {
+    .tickets-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .big-ball {
+        width: 160px;
+        height: 160px;
+        font-size: 80px;
+    }
+}
+
+/* ==================== LOADING ==================== */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: clamp(420px, 72vh, 760px);
+    text-align: center;
+    position: relative;
+    padding: clamp(24px, 5vw, 64px) clamp(12px, 4vw, 40px);
+    overflow: hidden;
+    border-radius: 22px;
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.32);
+}
+
+.back-btn {
+    width: 42px;
+    height: 42px;
+    padding: 20px 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.back-btn:active {
+    transform: scale(0.95);
+}
+
+.loading-back-btn {
+    position: absolute;
+    top: clamp(14px, 3vw, 24px);
+    left: clamp(12px, 4vw, 24px);
+    z-index: 3;
+}
+
+.loading-stage {
+    position: relative;
+    width: min(820px, 100%);
+    display: grid;
+    place-items: center;
+    gap: clamp(16px, 3vw, 26px);
+}
+
+.loto-aurora {
+    position: absolute;
+    inset: -34%;
+    background: conic-gradient(from 45deg, rgba(255, 214, 102, 0.16), rgba(255, 105, 180, 0.07), rgba(83, 161, 255, 0.08), rgba(255, 214, 102, 0.14));
+    filter: blur(58px) saturate(142%);
+    animation: auroraSweep 10s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.loading-loto-card {
+    position: relative;
+    width: min(640px, 94vw);
+    aspect-ratio: 394 / 141;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: #ffffff;
+    background-image: url("./lotoImages/lotoCardBg.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow:
+        0 24px 54px rgba(0, 0, 0, 0.34),
+        0 0 28px rgba(255, 214, 102, 0.14);
+    z-index: 1;
+}
+
+.loading-loto-card::before {
+    content: none;
+}
+
+.loading-card-grid {
+    position: absolute;
+    inset: 8% 2.8%;
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    background-image:
+        linear-gradient(to right, rgba(0, 0, 0, 0.22) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 1px, transparent 1px);
+    background-size: calc(100% / 9) calc(100% / 3);
+}
+
+.loading-card-cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.target-cell {
+    z-index: 2;
+}
+
+.loading-tile {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #161616;
+    grid-area: 1 / 1;
+    font-weight: 700;
+    font-size: clamp(16px, 3.6vw, 28px);
+    line-height: 1;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+    box-shadow: none;
+}
+
+.loading-tile--stone,
+.loading-tile--incoming {
+    width: min(92%, 54px);
+    height: auto;
+    aspect-ratio: 1;
+    background-image: url("../../assets/siteImages/lotoTileTemporary.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    font-weight: 900;
+    font-size: clamp(11px, 2.8vw, 20px);
+}
+
+.loading-tile::after {
+    content: none;
+}
+
+.loading-tile--incoming {
+    z-index: 2;
+    animation: loadingTileSlide 2.8s cubic-bezier(0.2, 0.88, 0.2, 1) infinite;
+    will-change: transform, opacity, filter;
+}
+
+.loading-tile--target-number {
+    z-index: 1;
+}
+
+.loading-tile--56 {
+    animation-delay: 0.42s;
+}
+
+
+/* Loading Text */
+.loading-text {
+    font-size: clamp(20px, 4vw, 32px);
+    font-weight: 900;
+    background: linear-gradient(120deg, #ffd166 0%, #ff9a3c 45%, #ffd166 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2.2s linear infinite;
+    margin-bottom: 8px;
+    text-shadow: 0 0 30px rgba(255, 209, 102, 0.6);
+}
+
+.loading-subtext {
+    font-size: clamp(12px, 2.5vw, 16px);
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    letter-spacing: 2px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Progress Dots */
+.dots {
+    display: inline-flex;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.dot {
+    width: clamp(10px, 2vw, 14px);
+    height: clamp(10px, 2vw, 14px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd166, #ff9a3c);
+    box-shadow: 0 0 15px rgba(255, 209, 102, 0.6);
+    animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+.dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.dot:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.dot:nth-child(5) {
+    animation-delay: 0.8s;
+}
+
+/* Animations */
+@keyframes loadingTileSlide {
+    0%,
+    12% {
+        transform: translateX(clamp(90px, 18vw, 190px)) scale(0.92);
+        opacity: 0;
+        filter: blur(1px);
+    }
+
+    34%,
+    78% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes auroraSweep {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+@keyframes sparkleAnim {
+
+    0%,
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .loading-container {
+        min-height: clamp(390px, 70vh, 620px);
+        padding: 22px 8px;
+    }
+
+    .back-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 17px;
+        padding: 0;
+    }
+
+    .loading-loto-card {
+        width: min(94vw, 620px);
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .loading-card-grid {
+        gap: 0;
+    }
+
+    .loading-card-cell {
+        border-radius: 0;
+    }
+
+    .loading-tile {
+        width: min(92%, 38px);
+        font-size: clamp(9px, 3.4vw, 15px);
+    }
+
+    .loading-tile:not(.loading-tile--stone):not(.loading-tile--incoming) {
+        width: 100%;
+        font-size: clamp(13px, 5.4vw, 23px);
+    }
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+.side-side {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mute-toggle {
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255, 211, 112, 0.7);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 35%),
+        linear-gradient(135deg, #213a31 0%, #12251d 55%, #07130e 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.25),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.28),
+        0 6px 0 #3c321d,
+        0 8px 15px rgba(0, 0, 0, 0.3),
+        0 0 18px rgba(255, 189, 66, 0.18);
+    overflow: visible;
+}
+
+.mute-toggle:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.32),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.25),
+        0 4px 0 #3c321d,
+        0 6px 15px rgba(0, 0, 0, 0.3),
+        0 0 24px rgba(255, 199, 77, 0.24);
+    transform: translateY(2px);
+}
+
+.mute-toggle:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.2),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.33),
+        0 2px 0 #3c321d,
+        0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(4px);
+}
+
+/* Active (unmuted) state - Yellow & Mint Green */
+.mute-toggle.active {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.23), rgba(255, 255, 255, 0) 35%),
+        radial-gradient(circle at 50% 0%, rgba(255, 225, 133, 0.32), transparent 55%),
+        linear-gradient(135deg, #c89528 0%, #1f6a43 52%, #0a321d 100%);
+    border-color: rgba(255, 226, 133, 0.86);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.44),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.28),
+        0 6px 0 #5b3909,
+        0 8px 15px rgba(0, 0, 0, 0.3),
+        0 0 26px rgba(255, 199, 77, 0.36),
+        0 0 17px rgba(48, 222, 126, 0.2);
+}
+
+.mute-toggle.active:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.5),
+        inset 0 -8px 13px rgba(0, 0, 0, 0.24),
+        0 4px 0 #5b3909,
+        0 6px 15px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(255, 205, 82, 0.44),
+        0 0 18px rgba(48, 222, 126, 0.24);
+    transform: translateY(2px);
+}
+
+.mute-toggle.active:active {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 249, 212, 0.32),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.34),
+        0 2px 0 #5b3909,
+        0 4px 10px rgba(0, 0, 0, 0.3),
+        0 0 18px rgba(255, 205, 82, 0.28);
+    transform: translateY(4px);
+}
+
+/* Icon container */
+.mute-toggle .icon {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 1px 0 rgba(40, 24, 0, 0.8)) drop-shadow(0 0 8px rgba(255, 205, 82, 0.48));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.mute-toggle:active .icon {
+    transform: scale(0.9);
+}

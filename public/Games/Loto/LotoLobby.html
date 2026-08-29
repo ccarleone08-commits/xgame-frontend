@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
+    <title>10 Line Loto - Rooms</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="../shared/backend-message-i18n.js"></script>
+    <link rel="stylesheet" href="./LotoLobby.css" />
+</head>
+
+<body>
+    <div class="container-game">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goToLobby()">
+                    ←
+                </button>
+                <button class="question-btn" id="questionBtn" aria-label="Game rules" data-i18n-aria-label="rules_button_label">?</button>
+            </div>
+            <div class="header-right">
+                <span class="loto-number" aria-hidden="true"></span>
+                <h1 class="header-title">LOTO</h1>
+                <span class="loto-number" aria-hidden="true"></span>
+            </div>
+            <div class="balance-display">
+                <span id="userBalance">0</span>
+                <img class="xgame-coin-icon" src="../../assets/siteImages/xGameCoin.png" alt="" aria-hidden="true" />
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingContainer" class="loading-container">
+        <div class="loading-stage">
+            <div class="loto-aurora"></div>
+
+            <div class="loading-loto-card" aria-hidden="true">
+                <div class="loading-card-grid">
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">7</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">18</span></div>
+                    <div class="loading-card-cell target-cell"><span class="loading-tile loading-tile--target-number">37</span><span class="loading-tile loading-tile--incoming loading-tile--37">37</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">44</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">61</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">82</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">12</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">29</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">41</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">68</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">90</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">4</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">23</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell target-cell"><span class="loading-tile loading-tile--target-number">56</span><span class="loading-tile loading-tile--incoming loading-tile--56">56</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">59</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">74</span></div>
+                </div>
+            </div>
+
+            <!-- Text -->
+            <div class="loading-text" id="loadingText" data-i18n="loading">LOADING</div>
+            <div class="loading-subtext" id="loadingSubtext" data-i18n="preparing">PREPARING YOUR GAME</div>
+
+            <!-- Progress dots -->
+            <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+    <div id="roomsContainer" class="rooms-container">
+    </div>
+
+    <div class="question-modal" id="questionModal" aria-hidden="true">
+        <div class="question-modal__overlay" data-close="true"></div>
+        <div class="question-modal__card" role="dialog" aria-modal="true" aria-labelledby="questionModalTitle">
+            <div class="question-modal__header">
+                <div class="question-modal__heading">
+                    <span class="question-modal__eyebrow" data-i18n="rules_eyebrow">How to play</span>
+                    <h2 id="questionModalTitle" class="question-modal__title" data-i18n="rules_title">Loto Rules</h2>
+                    <p class="question-modal__subtitle" data-i18n="rules_subtitle">Buy a ticket, follow the drawn numbers and complete the required pattern first.</p>
+                </div>
+                <button class="question-modal__close" id="questionModalClose" aria-label="Close" data-i18n-aria-label="close"></button>
+            </div>
+            <div class="question-modal__content">
+                <div class="question-modal__visual" aria-hidden="true">
+                    <div class="ticket-card question-modal__ticket-card">
+                        <div class="card-grid question-modal__card-grid">
+                            <div class="cell">7</div><div class="cell blank"></div><div class="cell marked">18</div><div class="cell">37</div><div class="cell blank"></div><div class="cell">44</div><div class="cell">61</div><div class="cell blank"></div><div class="cell">82</div>
+                            <div class="cell blank"></div><div class="cell">12</div><div class="cell blank"></div><div class="cell">29</div><div class="cell marked">41</div><div class="cell blank"></div><div class="cell">68</div><div class="cell blank"></div><div class="cell">90</div>
+                            <div class="cell">4</div><div class="cell blank"></div><div class="cell">23</div><div class="cell blank"></div><div class="cell blank"></div><div class="cell marked">56</div><div class="cell blank"></div><div class="cell">59</div><div class="cell">74</div>
+                        </div>
+                    </div>
+                    <div class="question-modal__balls">
+                        <span class="history-ball question-modal__history-ball">18</span>
+                        <span class="big-ball question-modal__draw-ball">41</span>
+                        <span class="history-ball question-modal__history-ball">56</span>
+                    </div>
+                </div>
+
+                <div class="question-modal__steps">
+                    <article class="question-modal__step">
+                        <span class="question-modal__step-number">01</span>
+                        <div>
+                            <h3 data-i18n="rules_step_join_title">Enter a room</h3>
+                            <p data-i18n="rules_step_join_text">Choose an available room and buy your Loto ticket before the round starts.</p>
+                        </div>
+                    </article>
+                    <article class="question-modal__step">
+                        <span class="question-modal__step-number">02</span>
+                        <div>
+                            <h3 data-i18n="rules_step_draw_title">Watch the draw</h3>
+                            <p data-i18n="rules_step_draw_text">Numbers are drawn one by one. Matching numbers on your ticket are marked automatically.</p>
+                        </div>
+                    </article>
+                    <article class="question-modal__step">
+                        <span class="question-modal__step-number">03</span>
+                        <div>
+                            <h3 data-i18n="rules_step_goal_title">Complete the target</h3>
+                            <p data-i18n="rules_step_goal_text">Some rooms require one full line, others require the entire ticket. The room badge shows the active target.</p>
+                        </div>
+                    </article>
+                    <article class="question-modal__step">
+                        <span class="question-modal__step-number">04</span>
+                        <div>
+                            <h3 data-i18n="rules_step_win_title">Win the prize</h3>
+                            <p data-i18n="rules_step_win_text">The first player who completes the target wins the round and the result is shown automatically.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="question-modal__chips" aria-label="Game rule highlights">
+                    <span data-i18n="rules_chip_auto">Auto mark</span>
+                    <span data-i18n="rules_chip_timer">Timed round</span>
+                    <span data-i18n="rules_chip_prize">Jackpot prize</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let currentUserToken = null;
+        let currentUserData = null;
+        let currentLanguage = "en";
+        let lobbyInitPromise = null;
+        let activeLobbyToken = null;
+
+        const translations = {
+            en: {
+                title: "Loto",
+                loading: "LOADING ROOMS",
+                preparing: "PREPARING YOUR GAME",
+                roomsLoading: "Rooms are loading...",
+                playing: "▶ Playing",
+                joinDisabled: "Game already started",
+                waiting: "Waiting",
+                jackpot: "JACKPOT",
+                cards: "ONLINE",
+                time: "TIME",
+                started: "STARTED",
+                secondsSuffix: "s",
+                connectionError: " Connection error",
+                ticketPrice: "TICKET PRICE",
+                totalAmount: "TOTAL AMOUNT",
+                previousWin: "PREVIOUS WIN AMOUNT",
+                singleLine: "SINGLE LINE",
+                entireCard: "ENTIRE CARD",
+                rules_button_label: "Game rules",
+                close: "Close",
+                rules_eyebrow: "How to play",
+                rules_title: "Loto Rules",
+                rules_subtitle: "Buy a ticket, follow the drawn numbers and complete the required pattern first.",
+                rules_step_join_title: "Enter a room",
+                rules_step_join_text: "Choose an available room and buy your Loto ticket before the round starts.",
+                rules_step_draw_title: "Watch the draw",
+                rules_step_draw_text: "Numbers are drawn one by one. Matching numbers on your ticket are marked automatically.",
+                rules_step_goal_title: "Complete the target",
+                rules_step_goal_text: "Some rooms require one full line, others require the entire ticket. The room badge shows the active target.",
+                rules_step_win_title: "Win the prize",
+                rules_step_win_text: "The first player who completes the target wins the round and the result is shown automatically.",
+                rules_chip_auto: "Auto mark",
+                rules_chip_timer: "Timed round",
+                rules_chip_prize: "Jackpot prize"
+            },
+            tr: {
+                title: "Loto",
+                loading: "ODALAR YÜKLENİYOR",
+                preparing: "OYUNUNUZ HAZIRLANIYOR",
+                roomsLoading: "Odalar yükleniyor...",
+                playing: "▶ Oynanıyor",
+                joinDisabled: "Oyun zaten başladı",
+                waiting: "Bekleniyor",
+                jackpot: "JACKPOT",
+                cards: "ONLİNE",
+                time: "SÜRE",
+                started: "BAŞLADI",
+                secondsSuffix: "s",
+                connectionError: " Bağlantı hatası",
+                ticketPrice: "BİLET ÜCRETİ",
+                totalAmount: "TOPLAM MİKTAR",
+                previousWin: "ÖNCEKİ OYUN KAZANCI",
+                singleLine: "TEK SATIR",
+                entireCard: "TAM KART",
+                rules_button_label: "Oyun kuralları",
+                close: "Kapat",
+                rules_eyebrow: "Nasıl oynanır",
+                rules_title: "Loto Kuralları",
+                rules_subtitle: "Bilet al, çekilen sayıları takip et ve gerekli deseni ilk tamamlayan ol.",
+                rules_step_join_title: "Odaya gir",
+                rules_step_join_text: "Uygun bir oda seç ve tur başlamadan önce Loto biletini satın al.",
+                rules_step_draw_title: "Çekilişi izle",
+                rules_step_draw_text: "Sayılar tek tek çekilir. Biletindeki eşleşen sayılar otomatik işaretlenir.",
+                rules_step_goal_title: "Hedefi tamamla",
+                rules_step_goal_text: "Bazı odalarda tek satır, bazı odalarda tam bilet gerekir. Oda etiketi aktif hedefi gösterir.",
+                rules_step_win_title: "Ödülü kazan",
+                rules_step_win_text: "Hedefi ilk tamamlayan oyuncu turu kazanır ve sonuç otomatik gösterilir.",
+                rules_chip_auto: "Otomatik işaret",
+                rules_chip_timer: "Süreli tur",
+                rules_chip_prize: "Jackpot ödülü"
+            },
+            hi: {
+                title: "Loto",
+                loading: "कमरे लोड हो रहे हैं",
+                preparing: "आपका गेम तैयार हो रहा है",
+                roomsLoading: "कमरे लोड हो रहे हैं...",
+                playing: "▶ चल रहा है",
+                joinDisabled: "गेम पहले ही शुरू हो चुका है",
+                waiting: "प्रतीक्षा",
+                jackpot: "जैकपॉट",
+                cards: "ऑनलाइन",
+                time: "समय",
+                started: "शुरू",
+                secondsSuffix: "सेक",
+                connectionError: " कनेक्शन त्रुटि",
+                ticketPrice: "टिकट कीमत",
+                totalAmount: "कुल राशि",
+                previousWin: "पिछली जीत राशि",
+                singleLine: "सिंगल लाइन",
+                entireCard: "पूर्ण कार्ड",
+                rules_button_label: "गेम नियम",
+                close: "बंद करें",
+                rules_eyebrow: "कैसे खेलें",
+                rules_title: "लोटो नियम",
+                rules_subtitle: "टिकट खरीदें, निकले नंबरों को देखें और जरूरी पैटर्न सबसे पहले पूरा करें.",
+                rules_step_join_title: "रूम में जाएं",
+                rules_step_join_text: "उपलब्ध रूम चुनें और राउंड शुरू होने से पहले अपना लोटो टिकट खरीदें.",
+                rules_step_draw_title: "ड्रा देखें",
+                rules_step_draw_text: "नंबर एक-एक करके निकलते हैं. आपके टिकट पर मिले नंबर अपने आप मार्क हो जाते हैं.",
+                rules_step_goal_title: "लक्ष्य पूरा करें",
+                rules_step_goal_text: "कुछ रूम में एक पूरी लाइन चाहिए, कुछ में पूरा टिकट. रूम बैज सक्रिय लक्ष्य दिखाता है.",
+                rules_step_win_title: "इनाम जीतें",
+                rules_step_win_text: "जो खिलाड़ी लक्ष्य सबसे पहले पूरा करता है, वह राउंड जीतता है और परिणाम अपने आप दिखता है.",
+                rules_chip_auto: "ऑटो मार्क",
+                rules_chip_timer: "समय वाला राउंड",
+                rules_chip_prize: "जैकपॉट इनाम"
+            },
+            ru: {
+                title: "Loto",
+                loading: "КОМНАТЫ ЗАГРУЖАЮТСЯ",
+                preparing: "ПОДГОТОВКА ИГРЫ",
+                roomsLoading: "Комнаты загружаются...",
+                playing: "▶ Игра идет",
+                joinDisabled: "Игра уже началась",
+                waiting: "Ожидание",
+                jackpot: "ДЖЕКПОТ",
+                cards: "ОНЛАЙН",
+                time: "ВРЕМЯ",
+                started: "НАЧАЛОСЬ",
+                secondsSuffix: "с",
+                connectionError: " Ошибка соединения",
+                ticketPrice: "ЦЕНА БИЛЕТА",
+                totalAmount: "ОБЩАЯ СУММА",
+                previousWin: "ПРОШЛЫЙ ВЫИГРЫШ",
+                singleLine: "ОДНА ЛИНИЯ",
+                entireCard: "ПОЛНАЯ КАРТА",
+                rules_button_label: "Правила игры",
+                close: "Закрыть",
+                rules_eyebrow: "Как играть",
+                rules_title: "Правила Лото",
+                rules_subtitle: "Купите билет, следите за выпавшими числами и первым закройте нужную комбинацию.",
+                rules_step_join_title: "Войдите в комнату",
+                rules_step_join_text: "Выберите доступную комнату и купите билет Лото до начала раунда.",
+                rules_step_draw_title: "Следите за розыгрышем",
+                rules_step_draw_text: "Числа выпадают по одному. Совпадения в вашем билете отмечаются автоматически.",
+                rules_step_goal_title: "Закройте цель",
+                rules_step_goal_text: "В одних комнатах нужна одна линия, в других весь билет. Метка комнаты показывает активную цель.",
+                rules_step_win_title: "Заберите приз",
+                rules_step_win_text: "Игрок, который первым закроет цель, выигрывает раунд, а результат показывается автоматически.",
+                rules_chip_auto: "Автоотметка",
+                rules_chip_timer: "Раунд на время",
+                rules_chip_prize: "Джекпот"
+            },
+            ar: {
+                title: "Loto",
+                loading: "جارٍ تحميل الغرف",
+                preparing: "يتم تجهيز لعبتك",
+                roomsLoading: "جارٍ تحميل الغرف...",
+                playing: "▶ جارٍ اللعب",
+                joinDisabled: "لقد بدأت اللعبة بالفعل",
+                waiting: "في الانتظار",
+                jackpot: "الجائزة الكبرى",
+                cards: "متصل",
+                time: "الوقت",
+                started: "بدأت",
+                secondsSuffix: "ث",
+                connectionError: " خطأ في الاتصال",
+                ticketPrice: "سعر التذكرة",
+                totalAmount: "المبلغ الإجمالي",
+                previousWin: "قيمة الفوز السابق",
+                singleLine: "سطر واحد",
+                entireCard: "بطاقة كاملة",
+                rules_button_label: "قواعد اللعبة",
+                close: "إغلاق",
+                rules_eyebrow: "طريقة اللعب",
+                rules_title: "قواعد اللوتو",
+                rules_subtitle: "اشترِ تذكرة، تابع الأرقام المسحوبة وأكمل النمط المطلوب أولاً.",
+                rules_step_join_title: "ادخل الغرفة",
+                rules_step_join_text: "اختر غرفة متاحة واشترِ تذكرة اللوتو قبل بدء الجولة.",
+                rules_step_draw_title: "تابع السحب",
+                rules_step_draw_text: "تُسحب الأرقام واحداً تلو الآخر، ويتم تعليم الأرقام المطابقة في تذكرتك تلقائياً.",
+                rules_step_goal_title: "أكمل الهدف",
+                rules_step_goal_text: "بعض الغرف تتطلب سطراً كاملاً، وأخرى تتطلب التذكرة كاملة. شارة الغرفة تعرض الهدف النشط.",
+                rules_step_win_title: "اربح الجائزة",
+                rules_step_win_text: "أول لاعب يكمل الهدف يفوز بالجولة وتظهر النتيجة تلقائياً.",
+                rules_chip_auto: "تعليم تلقائي",
+                rules_chip_timer: "جولة محددة الوقت",
+                rules_chip_prize: "جائزة الجاكبوت"
+            },
+            uz: {
+                title: "Loto",
+                loading: "XONALAR YUKLANMOQDA",
+                preparing: "O'YININGIZ TAYYORLANMOQDA",
+                roomsLoading: "Xonalar yuklanmoqda...",
+                playing: "▶ O‘ynalmoqda",
+                joinDisabled: "O‘yin allaqachon boshlangan",
+                waiting: "Kutilmoqda",
+                jackpot: "JACKPOT",
+                cards: "ONLAYN",
+                time: "VAQT",
+                started: "BOSHLANDI",
+                secondsSuffix: "s",
+                connectionError: " Ulanish xatosi",
+                ticketPrice: "CHIPTA NARXI",
+                totalAmount: "JAMI MABLAG‘",
+                previousWin: "OLDINGI YUTUQ",
+                singleLine: "BITTA QATOR",
+                entireCard: "TO‘LIQ KARTA",
+                rules_button_label: "O'yin qoidalari",
+                close: "Yopish",
+                rules_eyebrow: "Qanday o'ynaladi",
+                rules_title: "Loto qoidalari",
+                rules_subtitle: "Chipta oling, chiqqan raqamlarni kuzating va kerakli shaklni birinchi bo'lib yakunlang.",
+                rules_step_join_title: "Xonaga kiring",
+                rules_step_join_text: "Mavjud xonani tanlang va raund boshlanishidan oldin Loto chiptasini sotib oling.",
+                rules_step_draw_title: "Raqamlarni kuzating",
+                rules_step_draw_text: "Raqamlar bittadan chiqadi. Chiptangizdagi mos raqamlar avtomatik belgilanadi.",
+                rules_step_goal_title: "Maqsadni yakunlang",
+                rules_step_goal_text: "Ba'zi xonalarda bitta to'liq qator, ba'zilarida butun chipta kerak bo'ladi. Xona belgisi faol maqsadni ko'rsatadi.",
+                rules_step_win_title: "Yutuqni oling",
+                rules_step_win_text: "Maqsadni birinchi yakunlagan o'yinchi raundni yutadi va natija avtomatik ko'rsatiladi.",
+                rules_chip_auto: "Avto belgi",
+                rules_chip_timer: "Vaqtli raund",
+                rules_chip_prize: "Jackpot yutug'i"
+            },
+            az: {
+                title: "Loto",
+                loading: "OTAQLAR YÜKLƏNİR",
+                preparing: "OYUNUNUZ HAZIRLANIR",
+                roomsLoading: "Otaqlar yüklənir...",
+                playing: "▶ Oynanılır",
+                joinDisabled: "Oyun artıq başlayıb",
+                waiting: "Gözlənilir",
+                jackpot: "JACKPOT",
+                cards: "ONLINE",
+                time: "VAXT",
+                started: "BAŞLADI",
+                secondsSuffix: "s",
+                connectionError: " Bağlantı xətası",
+                ticketPrice: "BİLET QİYMƏTİ",
+                totalAmount: "ÜMUMİ MƏBLƏĞ",
+                previousWin: "ƏVVƏLKİ UDUŞ",
+                singleLine: "TƏK SƏTİR",
+                entireCard: "TAM KART",
+                rules_button_label: "Oyun qaydaları",
+                close: "Bağla",
+                rules_eyebrow: "Necə oynanılır",
+                rules_title: "Loto Qaydaları",
+                rules_subtitle: "Bilet alın, çəkilən nömrələri izləyin və tələb olunan kombinasiyanı ilk tamamlayan olun.",
+                rules_step_join_title: "Otağa daxil olun",
+                rules_step_join_text: "Uyğun otağı seçin və raund başlamazdan əvvəl Loto biletinizi alın.",
+                rules_step_draw_title: "Çəkilişi izləyin",
+                rules_step_draw_text: "Nömrələr ardıcıl çəkilir. Biletinizdə uyğun nömrələr avtomatik işarələnir.",
+                rules_step_goal_title: "Hədəfi tamamlayın",
+                rules_step_goal_text: "Bəzi otaqlarda bir tam sətir, bəzilərində isə bütün bilet tələb olunur. Otaq nişanı aktiv hədəfi göstərir.",
+                rules_step_win_title: "Mükafatı qazanın",
+                rules_step_win_text: "Hədəfi ilk tamamlayan oyunçu raundu qazanır və nəticə avtomatik göstərilir.",
+                rules_chip_auto: "Avto işarə",
+                rules_chip_timer: "Vaxtlı raund",
+                rules_chip_prize: "Jackpot mükafatı"
+            }
+        };
+
+        function normalizeLanguage(lang) {
+            if (!lang) return "en";
+            const value = String(lang).trim().toLowerCase();
+            if (["en", "english"].includes(value)) return "en";
+            if (["tr", "turkish", "türkçe"].includes(value)) return "tr";
+            if (["hi", "hindi", "in", "indian"].includes(value)) return "hi";
+            if (["ru", "russian"].includes(value)) return "ru";
+            if (["ar", "arabic"].includes(value)) return "ar";
+            if (["uz", "uzbek", "o'zbek", "uzbekistan"].includes(value)) return "uz";
+            if (["az", "azeri", "azerbaijani", "azərbaycan", "azerbaycan"].includes(value)) return "az";
+            return "en";
+        }
+
+        function translateKey(dict, key) {
+            return dict[key] ?? translations.en[key] ?? "";
+        }
+
+        function applyTranslatedContent(dict) {
+            document.querySelectorAll("[data-i18n]").forEach((el) => {
+                const key = el.getAttribute("data-i18n");
+                const value = translateKey(dict, key);
+                if (value) el.textContent = value;
+            });
+
+            document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+                const key = el.getAttribute("data-i18n-aria-label");
+                const value = translateKey(dict, key);
+                if (value) el.setAttribute("aria-label", value);
+            });
+        }
+
+        function getInitialLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return normalizeLanguage(params.get("lang") || localStorage.getItem("app_language") || "en");
+        }
+
+        function applyLanguage(lang) {
+            currentLanguage = normalizeLanguage(lang);
+            const dict = translations[currentLanguage] || translations.en;
+            document.title = dict.title;
+            applyTranslatedContent(dict);
+            const loadingText = document.getElementById("loadingText");
+            if (loadingText) loadingText.textContent = dict.loading;
+            const loadingSubtext = document.getElementById("loadingSubtext");
+            if (loadingSubtext) loadingSubtext.textContent = dict.preparing;
+            document.documentElement.lang = currentLanguage;
+            document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+        }
+
+        console.log('🎰 [LOTO LOBBY] Script yükləndi');
+
+        window.addEventListener('message', async (event) => {
+            console.log('📨 [LOTO LOBBY] Message alındı:', event.data);
+
+            if (event.data?.payload?.language) {
+                applyLanguage(event.data.payload.language);
+            }
+
+            if (event.data && event.data.type === 'INIT_USER') {
+                console.log('✅ [LOTO LOBBY] INIT_USER qəbul edildi');
+
+                const previousToken = currentUserToken;
+                currentUserData = event.data.payload;
+                currentUserToken = currentUserData.token;
+
+                console.log('👤 [LOTO LOBBY] User:', currentUserData.username);
+                console.log('🎫 [LOTO LOBBY] Token:', currentUserToken ? 'VAR' : 'YOX');
+
+                // Balance göstər
+                document.getElementById("userBalance").textContent =
+                    currentUserData.balance.toFixed(2);
+
+                if (activeLobbyToken === currentUserToken && isLobbyConnectionRunning()) {
+                    console.log('ℹ️ [LOTO LOBBY] Lobby artıq başladılıb, təkrar init keçildi');
+                    return;
+                }
+
+                if (previousToken && previousToken !== currentUserToken) {
+                    await resetLobbyConnection();
+                }
+
+                console.log('🚀 [LOTO LOBBY] init() çağırılır...');
+                // SignalR başlat
+                await init();
+            }
+        });
+
+        // ============================================
+        // getToken funksiyasını dəyişdir
+        // ============================================
+        function getToken() {
+            return currentUserToken || "";
+        }
+        // ------------------------------
+        let connection = null;
+        let userBalance = 0;
+        let updateInterval = null;
+        let localTimerInterval = null;
+        let roomsRequestInFlight = false;
+        let roomsRefreshQueued = false;
+        let roomsRefreshDebounce = null;
+        let roomsRefreshDueAt = 0;
+        let lastRoomsFetchStartedAt = 0;
+        let lastRoomsLanguage = currentLanguage;
+        const renderedRooms = new Map();
+        const roomSnapshots = new Map();
+        const roomTimers = new Map();
+        const STARTED_ROOM_RESET_THRESHOLD_SECONDS = 10;
+        const ROOM_TIMER_STEP_MS = 1000;
+        const coinIconMarkup = '<img class="xgame-coin-icon" src="../../assets/siteImages/xGameCoin.png" alt="" aria-hidden="true" />';
+
+        // function getToken() {
+        //     const raw = document.cookie
+        //         .split("; ")
+        //         .find(row => row.startsWith("AuthToken="))
+        //         ?.split("=")[1];
+        //     if (!raw) return "";
+        //     let token = decodeURIComponent(raw).trim();
+        //     if (token.endsWith(".")) token = token.slice(0, -1);
+        //     return token;
+        // }
+
+        function createConnection() {
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://api.xgame.game/lotoHub", {
+                    accessTokenFactory: () => getToken()
+                })
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            setupHandlers();
+            return connection;
+        }
+        function removeLoading() {
+            const loadingContainer = document.getElementById("loadingContainer");
+            if (loadingContainer) {
+                loadingContainer.remove();
+            }
+        }
+        function setupHandlers() {
+            connection.on("UserData", (data) => {
+                userBalance = data.balance;
+                // Artıq React-dən aldıq, yenidən yazmırıq
+                console.log("✅ [LOTO LOBBY] UserData event:", data);
+            });
+
+            connection.on("RoomListUpdated", () => {
+                scheduleRoomsRefresh();
+            });
+        }
+
+        function isLobbyConnectionRunning() {
+            if (!connection || !window.signalR) return false;
+            return connection.state !== signalR.HubConnectionState.Disconnected;
+        }
+
+        async function resetLobbyConnection() {
+            clearInterval(updateInterval);
+            clearInterval(localTimerInterval);
+            clearTimeout(roomsRefreshDebounce);
+            updateInterval = null;
+            localTimerInterval = null;
+            roomsRefreshDebounce = null;
+            roomsRequestInFlight = false;
+            roomsRefreshQueued = false;
+            roomsRefreshDueAt = 0;
+            activeLobbyToken = null;
+            lobbyInitPromise = null;
+            renderedRooms.clear();
+            roomSnapshots.clear();
+            clearAllRoomTimers();
+            const roomsContainer = document.getElementById("roomsContainer");
+            if (roomsContainer) roomsContainer.innerHTML = "";
+
+            if (connection) {
+                const oldConnection = connection;
+                connection = null;
+                try {
+                    await oldConnection.stop();
+                } catch (err) {
+                    console.warn('⚠️ [LOTO LOBBY] Old connection stop error:', err);
+                }
+            }
+        }
+
+        function scheduleRoomsRefresh(delay = 250) {
+            const now = Date.now();
+            const minDelay = Math.max(delay, 1500 - (now - lastRoomsFetchStartedAt));
+            const dueAt = now + minDelay;
+            if (roomsRefreshDebounce && roomsRefreshDueAt <= dueAt) return;
+            clearTimeout(roomsRefreshDebounce);
+            roomsRefreshDueAt = dueAt;
+            roomsRefreshDebounce = setTimeout(() => {
+                roomsRefreshDebounce = null;
+                roomsRefreshDueAt = 0;
+                loadRooms();
+            }, minDelay);
+        }
+
+        async function loadRooms() {
+            // ← BU YOXLANIŞI ƏLAVE ET:
+            if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                console.log('⏳ Connection hələ hazır deyil');
+                return;
+            }
+            if (roomsRequestInFlight) {
+                roomsRefreshQueued = true;
+                return;
+            }
+            roomsRequestInFlight = true;
+            lastRoomsFetchStartedAt = Date.now();
+            try {
+                const rooms = await connection.invoke("GetRoomList");
+                renderRooms(rooms);
+                removeLoading();
+            } catch (err) {
+                console.error("Load rooms error:", err);
+            } finally {
+                roomsRequestInFlight = false;
+                if (roomsRefreshQueued) {
+                    roomsRefreshQueued = false;
+                    scheduleRoomsRefresh(350);
+                }
+            }
+        }
+
+        function renderRooms(rooms) {
+            const container = document.getElementById("roomsContainer");
+            const dict = translations[currentLanguage] || translations.en;
+
+            if (!rooms || rooms.length === 0) {
+                renderedRooms.clear();
+                roomSnapshots.clear();
+                clearAllRoomTimers();
+                container.innerHTML = `<div class="loading">${dict.roomsLoading}</div>`;
+                return;
+            }
+
+            if (lastRoomsLanguage !== currentLanguage) {
+                renderedRooms.clear();
+                roomSnapshots.clear();
+                container.innerHTML = "";
+                lastRoomsLanguage = currentLanguage;
+            }
+
+            if (container.querySelector(".loading")) {
+                container.innerHTML = "";
+            }
+
+            const activeRoomIds = new Set();
+
+            rooms.forEach(room => {
+                const roomId = String(room.roomId);
+                activeRoomIds.add(roomId);
+                const snapshot = normalizeRoomSnapshot(room);
+                roomSnapshots.set(roomId, snapshot);
+                syncRoomTimerFromBackend(roomId, snapshot);
+
+                let card = renderedRooms.get(roomId);
+                if (!card) {
+                    card = document.createElement("div");
+                    card.dataset.roomId = roomId;
+                    renderedRooms.set(roomId, card);
+                    container.appendChild(card);
+                }
+
+                updateRoomCard(card, snapshot, dict);
+            });
+
+            renderedRooms.forEach((card, roomId) => {
+                if (!activeRoomIds.has(roomId)) {
+                    card.remove();
+                    renderedRooms.delete(roomId);
+                    roomSnapshots.delete(roomId);
+                    clearRoomTimer(roomId);
+                }
+            });
+
+            updateRoomTimers();
+        }
+
+        function normalizeRoomStarted(room) {
+            const value = room?.isGameStarted;
+            if (typeof value === "string") {
+                return value.trim().toLowerCase() === "true";
+            }
+            return Boolean(value);
+        }
+
+        function normalizeRoomSeconds(room) {
+            const value = Number(room?.timeRemaining ?? 0);
+            if (!Number.isFinite(value)) return 0;
+            return Math.max(0, Math.ceil(value));
+        }
+
+        function normalizeRoomSnapshot(nextRoom) {
+            const isGameStarted = normalizeRoomStarted(nextRoom);
+            const nextSeconds = normalizeRoomSeconds(nextRoom);
+            return {
+                ...nextRoom,
+                isGameStarted,
+                timeRemaining: nextSeconds
+            };
+        }
+
+        function clearRoomTimer(roomId) {
+            const timer = roomTimers.get(roomId);
+            if (timer?.timeoutId) {
+                clearTimeout(timer.timeoutId);
+            }
+            roomTimers.delete(roomId);
+        }
+
+        function clearAllRoomTimers() {
+            roomTimers.forEach(timer => {
+                if (timer?.timeoutId) {
+                    clearTimeout(timer.timeoutId);
+                }
+            });
+            roomTimers.clear();
+        }
+
+        function scheduleLocalRoomTimerTick(roomId, timer) {
+            if (timer.timeoutId) {
+                clearTimeout(timer.timeoutId);
+            }
+
+            if (!timer.isStarted || timer.displaySeconds <= 0) {
+                timer.timeoutId = null;
+                return;
+            }
+
+            timer.timeoutId = setTimeout(() => {
+                const activeTimer = roomTimers.get(roomId);
+                if (activeTimer !== timer || !timer.isStarted || timer.displaySeconds <= 0) {
+                    return;
+                }
+
+                timer.displaySeconds = Math.max(0, timer.displaySeconds - 1);
+                renderRoomTimer(roomId);
+                scheduleLocalRoomTimerTick(roomId, timer);
+            }, ROOM_TIMER_STEP_MS);
+        }
+
+        function startLocalRoomTimer(roomId, timer, seconds) {
+            timer.isStarted = true;
+            timer.displaySeconds = Math.max(0, Math.floor(seconds || 0));
+            timer.serverSeconds = timer.displaySeconds;
+            timer.lastServerSeconds = timer.displaySeconds;
+            renderRoomTimer(roomId);
+            scheduleLocalRoomTimerTick(roomId, timer);
+        }
+
+        function stopLocalRoomTimer(timer, seconds = 0) {
+            if (timer.timeoutId) {
+                clearTimeout(timer.timeoutId);
+            }
+            timer.isStarted = false;
+            timer.displaySeconds = Math.max(0, Math.floor(seconds || 0));
+            timer.serverSeconds = timer.displaySeconds;
+            timer.lastServerSeconds = timer.displaySeconds;
+            timer.timeoutId = null;
+        }
+
+        function syncRoomTimerFromBackend(roomId, room) {
+            const serverSeconds = normalizeRoomSeconds(room);
+            let timer = roomTimers.get(roomId);
+
+            if (!timer) {
+                timer = {
+                    isStarted: false,
+                    displaySeconds: serverSeconds,
+                    serverSeconds,
+                    lastServerSeconds: serverSeconds,
+                    timeoutId: null
+                };
+                roomTimers.set(roomId, timer);
+            }
+
+            if (!room.isGameStarted) {
+                stopLocalRoomTimer(timer, serverSeconds);
+                renderRoomTimer(roomId);
+                return timer;
+            }
+
+            if (!timer.isStarted) {
+                startLocalRoomTimer(roomId, timer, serverSeconds);
+                return timer;
+            }
+
+            const previousServerSeconds = Number(timer.lastServerSeconds);
+            const serverLooksLikeNewRound =
+                Number.isFinite(previousServerSeconds) &&
+                serverSeconds > previousServerSeconds + STARTED_ROOM_RESET_THRESHOLD_SECONDS &&
+                serverSeconds > timer.displaySeconds + STARTED_ROOM_RESET_THRESHOLD_SECONDS;
+            const localEndedButServerRestarted =
+                timer.displaySeconds <= 0 &&
+                serverSeconds > STARTED_ROOM_RESET_THRESHOLD_SECONDS;
+
+            timer.serverSeconds = serverSeconds;
+            timer.lastServerSeconds = serverSeconds;
+
+            if (serverLooksLikeNewRound || localEndedButServerRestarted) {
+                startLocalRoomTimer(roomId, timer, serverSeconds);
+            }
+
+            return timer;
+        }
+
+        function ensureRoomCardStructure(card) {
+            if (card.dataset.structureReady === "true") return;
+
+            card.innerHTML = `
+                    <div class="room-time">
+                        <span class="time-digit">0</span>
+                        <span class="time-digit">0</span>
+                        <span class="time-digit">0</span>
+                        <span class="time-digit">0</span>
+                    </div>
+
+                    <div class="status-row">
+                        <span class="status-badge badge-waiting" data-room-field="cardType"></span>
+                        <span class="status-badge badge-waiting" data-room-field="status"></span>
+                    </div>
+
+                    <div class="ticket-price">
+                        <div class="price-label" data-room-field="ticketPriceLabel"></div>
+                        <div class="price-value" data-room-field="entryFee"></div>
+                    </div>
+                    <div class="jackpot-display">
+                        <div class="jackpot-amount" data-room-field="jackpot"></div>
+                    </div>
+                    <div class="room-stats">
+                        <div class="stats-online" data-room-field="online"></div>
+                    </div>
+                    `;
+            card.dataset.structureReady = "true";
+        }
+
+        function setRoomField(card, field, value) {
+            const node = card.querySelector(`[data-room-field="${field}"]`);
+            if (!node) return;
+            const text = String(value ?? "");
+            if (node.textContent !== text) {
+                node.textContent = text;
+            }
+        }
+
+        function setRoomAmountField(card, field, value) {
+            const node = card.querySelector(`[data-room-field="${field}"]`);
+            if (!node) return;
+            const amount = Number(value || 0).toFixed(2);
+            if (node.dataset.amountValue === amount) return;
+            node.dataset.amountValue = amount;
+            node.innerHTML = `<span>${amount}</span>${coinIconMarkup}`;
+        }
+
+        function updateRoomCard(card, room, dict) {
+            ensureRoomCardStructure(card);
+
+            const isRoomLocked = room.isGameStarted;
+            const nextClassName = `room-card ${isRoomLocked ? 'playing' : ''}`;
+            if (card.className !== nextClassName) {
+                card.className = nextClassName;
+            }
+
+            const cardTypeText = (room.entryFee == 0.5 || room.entryFee == 0.2)
+                ? dict.entireCard
+                : dict.singleLine;
+            const statusText = room.isGameStarted ? dict.playing : dict.waiting;
+            const statusBadge = card.querySelector('[data-room-field="status"]');
+
+            setRoomField(card, "cardType", cardTypeText);
+            setRoomField(card, "status", statusText);
+            setRoomField(card, "ticketPriceLabel", dict.ticketPrice);
+            setRoomAmountField(card, "entryFee", room.entryFee);
+            setRoomAmountField(card, "jackpot", room.jackpotPool);
+            setRoomField(card, "online", `${room.playerCount ?? 0} ${dict.cards}`);
+
+            if (statusBadge) {
+                const statusClass = `status-badge ${room.isGameStarted ? 'badge-playing' : 'badge-waiting'}`;
+                if (statusBadge.className !== statusClass) {
+                    statusBadge.className = statusClass;
+                }
+            }
+
+            if (isRoomLocked) {
+                card.setAttribute("aria-disabled", "true");
+                card.setAttribute("title", dict.joinDisabled);
+                card.onclick = null;
+            } else {
+                card.removeAttribute("aria-disabled");
+                card.removeAttribute("title");
+                card.onclick = () => {
+                    console.log('🎮 [LOTO LOBBY] Room clicked:', room.roomId);
+                    window.parent.postMessage({
+                        type: 'JOIN_ROOM',
+                        roomId: room.roomId
+                    }, '*');
+                };
+            }
+        }
+
+        function getRoomDisplaySeconds(roomId, room) {
+            const timer = roomTimers.get(roomId);
+            const value = timer ? timer.displaySeconds : room.timeRemaining;
+            const seconds = Number(value ?? 0);
+            if (!Number.isFinite(seconds)) return 0;
+            return Math.max(0, Math.floor(seconds));
+        }
+
+        function renderRoomTimer(roomId) {
+            const card = renderedRooms.get(roomId);
+            const room = roomSnapshots.get(roomId);
+            if (!card || !room) return;
+            const totalSeconds = getRoomDisplaySeconds(roomId, room);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const digits = `${String(minutes).padStart(2, "0")}${String(seconds).padStart(2, "0")}`.split("");
+            const digitNodes = card.querySelectorAll(".time-digit");
+            digitNodes.forEach((node, index) => {
+                const nextDigit = digits[index] || "0";
+                if (node.textContent !== nextDigit) {
+                    node.textContent = nextDigit;
+                }
+            });
+        }
+
+        function updateRoomTimers() {
+            roomSnapshots.forEach((_, roomId) => renderRoomTimer(roomId));
+        }
+        function goToLobby() {
+            window.parent.postMessage({ type: 'BACK_TO_GAMES', payload: {} }, '*');
+        }
+
+        function openQuestionModal() {
+            const modal = document.getElementById("questionModal");
+            if (!modal) return;
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+        }
+
+        function closeQuestionModal() {
+            const modal = document.getElementById("questionModal");
+            if (!modal) return;
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+
+        async function init() {
+            console.log('🚀 [LOTO LOBBY] init() başladı');
+
+            if (!currentUserToken) {
+                console.error('❌ [LOTO LOBBY] Token yoxdur!');
+                return;
+            }
+
+            if (lobbyInitPromise) {
+                return lobbyInitPromise;
+            }
+
+            if (activeLobbyToken === currentUserToken && isLobbyConnectionRunning()) {
+                return;
+            }
+
+            activeLobbyToken = currentUserToken;
+
+            lobbyInitPromise = startLobbyConnection()
+                .catch((err) => {
+                    activeLobbyToken = null;
+                    throw err;
+                })
+                .finally(() => {
+                    lobbyInitPromise = null;
+                });
+
+            return lobbyInitPromise;
+        }
+
+        async function startLobbyConnection() {
+            try {
+                connection = createConnection();
+                await connection.start();
+                console.log("✅ [LOTO LOBBY] SignalR connected");
+
+                // ← Connection ready olandan SONRA loadRooms çağır:
+                await loadRooms();
+
+                // Sonra interval başlat:
+                clearInterval(updateInterval);
+                clearInterval(localTimerInterval);
+                updateInterval = setInterval(() => scheduleRoomsRefresh(0), 6000);
+                localTimerInterval = null;
+
+            } catch (err) {
+                console.error("❌ [LOTO LOBBY] Connection error:", err);
+                activeLobbyToken = null;
+                document.getElementById("roomsContainer").innerHTML =
+                    `<div class="loading">${(translations[currentLanguage] || translations.en).connectionError}</div>`;
+            }
+        }
+
+        currentLanguage = getInitialLanguage();
+        applyLanguage(currentLanguage);
+        console.log('✅ [LOTO LOBBY] Script tam yükləndi, postMessage gözlənilir...');
+
+        const questionBtn = document.getElementById("questionBtn");
+        const questionClose = document.getElementById("questionModalClose");
+        const questionModal = document.getElementById("questionModal");
+
+        if (questionBtn) questionBtn.addEventListener("click", openQuestionModal);
+        if (questionClose) questionClose.addEventListener("click", closeQuestionModal);
+        if (questionModal) {
+            questionModal.addEventListener("click", (e) => {
+                if (e.target && e.target.dataset && e.target.dataset.close) {
+                    closeQuestionModal();
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

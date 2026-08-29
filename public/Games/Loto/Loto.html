@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>10 Line Loto - Oyun</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+    <script src="../shared/backend-message-i18n.js"></script>
+    <link rel="stylesheet" href="./Loto.css" />
+</head>
+
+<body>
+    <div id="loadingContainer" class="loading-container">
+        <button class="back-btn loading-back-btn" type="button" onclick="goToLobby()" aria-label="Back to lobby">
+            ←
+        </button>
+        <div class="loading-stage">
+            <div class="loto-aurora"></div>
+
+            <div class="loading-loto-card" aria-hidden="true">
+                <div class="loading-card-grid">
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">7</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">18</span></div>
+                    <div class="loading-card-cell target-cell"><span class="loading-tile loading-tile--target-number">37</span><span class="loading-tile loading-tile--incoming loading-tile--37">37</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">44</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">61</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">82</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">12</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">29</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">41</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">68</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">90</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">4</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile loading-tile--stone">23</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell target-cell"><span class="loading-tile loading-tile--target-number">56</span><span class="loading-tile loading-tile--incoming loading-tile--56">56</span></div>
+                    <div class="loading-card-cell"></div>
+                    <div class="loading-card-cell"><span class="loading-tile">59</span></div>
+                    <div class="loading-card-cell"><span class="loading-tile">74</span></div>
+                </div>
+            </div>
+
+            <!-- Text -->
+            <div class="loading-text" id="loadingText" data-i18n="loading">LOADING</div>
+            <div class="loading-subtext" id="loadingSubtext" data-i18n="preparing">PREPARING YOUR GAME</div>
+
+            <!-- Progress dots -->
+            <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+    <div style="display: none;" class="loto-game-container">
+        <div class="top-bar-game">
+            <div class="top-bar-side">
+                <div class="top-bar-section">
+                    <div class="side-display">
+                        <button id="backBtn" class="exit-button" data-i18n="exit">← Exit</button>
+                        <button id="autoBtn" class="auto-button is-active" aria-pressed="true">
+                            <span class="auto-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 2L3 14h7l-1 8 12-14h-7l-1-6z" />
+                                </svg>
+                            </span>
+                            <span class="auto-text" data-i18n="auto">Auto</span>
+                        </button>
+                    </div>
+                    <div class="middle-display">
+                        <div class="jackpot-display">
+                            <span id="jackpotAmount">0.00</span>
+                            <img class="xgame-coin-icon" src="../../assets/siteImages/xGameCoin.png" alt="" aria-hidden="true" />
+                        </div>
+                        <div class="win-rule-badge" id="winRuleBadge" data-i18n="win_rule_entire_card">Entire Card
+                        </div>
+                        <div id="balanceDisplay" class="balance-display">
+                            <span id="userBalance">0.00</span>
+                            <img class="xgame-coin-icon" src="../../assets/siteImages/xGameCoin.png" alt="" aria-hidden="true" />
+                        </div>
+                    </div>
+                    <div class="side-display">
+                        <div class="side-side">
+                            <div class="win-rule-badge" id="timerBadge">0:00</div>
+                            <button class="mute-toggle active" onclick="toggleMute(this)" aria-label="Toggle sound">
+                                <span class="icon">🔊</span>
+                            </button>
+                        </div>
+                        <button id="buyTicketBtn" onclick="checkTicketAvailability()" class="buy-ticket-button"
+                            data-i18n="buy_ticket">+ Buy ticket</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="drawn-number">
+            <div class="big-ball" id="bigBall">--</div>
+            <div class="history" id="history"></div>
+            <div id="closestCardPills" class="closest-card-pills is-hidden" aria-live="polite" hidden></div>
+        </div>
+
+        <div class="tickets-container" id="ticketsContainer"></div>
+
+        <div id="gameOverModal" class="modal">
+            <div class="modal-content">
+                <div class="countdown-timer" id="countdownTimer">10</div>
+                <h2 data-i18n="winner_title">WINNER</h2>
+                <div class="winner-name" id="winnerName"></div>
+                <div class="win-type-badge" id="winTypeBadge"></div>
+                <div class="prize-amount" id="prizeAmount"></div>
+                <div class="winner-card-display">
+                    <h3 data-i18n="winner_ticket">Winner Ticket</h3>
+                    <div class="winner-card-shell">
+                        <div class="winner-card-grid" id="winnerCardGrid"></div>
+                    </div>
+                </div>
+                <button class="btn winner-modal-btn" onclick="goToLobby()">
+                    <span data-i18n="return_to_lobby">Return to Lobby</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        //Audios
+        let isMuted = false;
+
+        const sounds = {
+            ticketPurchased: new Audio('./lotoSounds/ticketPurchased.mp3'),
+            win: new Audio('./lotoSounds/winSound.mp3'),
+            numberDrawn: new Audio('./lotoSounds/numberDrawn.mp3'),
+        }
+        // iOS / Chrome üçün preload
+        Object.values(sounds).forEach(sound => {
+            sound.preload = 'auto';
+            sound.volume = 0.8;
+        });
+        function playSound(name) {
+            if (isMuted) return Promise.resolve(null);
+
+            const sound = sounds[name];
+            if (!sound) {
+                console.warn('Sound not found:', name);
+                return Promise.resolve(null);
+            }
+
+            sound.currentTime = 0; // təkrar çalmaq üçün
+            return sound.play().catch(() => {
+                // autoplay policy fallback
+                return null;
+            });
+        }
+        function unlockAudio() {
+            Object.values(sounds).forEach(sound => {
+                sound.play()
+                    .then(() => {
+                        sound.pause();
+                        sound.currentTime = 0;
+                    })
+                    .catch(() => { });
+            });
+
+            console.log("🔓 Audio unlocked");
+        }
+        document.addEventListener('touchstart', unlockAudio, { once: true });
+        document.addEventListener('click', unlockAudio, { once: true });
+        document.addEventListener('touchstart', unlockSpeechSynthesis, { once: true });
+        document.addEventListener('pointerdown', unlockSpeechSynthesis, { once: true });
+        document.addEventListener('click', unlockSpeechSynthesis, { once: true });
+
+        //mute Toggle
+        function toggleMute(button) {
+            isMuted = !isMuted;
+            const isActive = button.classList.contains('active');
+            const icon = button.querySelector('.icon');
+
+            if (isActive) {
+                // Mute
+                button.classList.remove('active');
+                icon.textContent = '🔇';
+            } else {
+                // Unmute
+                button.classList.add('active');
+                icon.textContent = '🔊';
+            }
+        }
+
+
+        // ============================================
+        // React-dən user data
+        // ============================================
+        let currentUserToken = null;
+        let currentUserData = null;
+        let currentRoomId = null;
+
+        let isInitialized = false;
+        let currentLanguage = 'en';
+        let isAutoMark = true;
+        const manualMarks = new Map();
+        let speechVoices = [];
+        let isSpeechUnlocked = false;
+        let pendingSpeechNumber = null;
+        let speechRetryTimer = null;
+        let activeSpeechUtterance = null;
+        let lotoSpeechRequestId = 0;
+        const pendingParentSpeechRequests = new Map();
+        let closestCardGroups = [];
+        let closestCardRawPayload = null;
+        const isIOS = (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const speechLangMap = {
+            en: 'en-US',
+            tr: 'tr-TR',
+            hi: 'hi-IN',
+            ru: 'ru-RU',
+            ar: 'ar-SA',
+            uz: 'uz-UZ',
+            az: 'az-AZ'
+        };
+        const speechFallbackLangMap = {
+            az: ['tr-TR', 'en-US'],
+            uz: ['tr-TR', 'en-US'],
+            en: ['en-US', 'en-GB'],
+            tr: ['tr-TR', 'en-US'],
+            hi: ['hi-IN', 'en-US'],
+            ru: ['ru-RU', 'en-US'],
+            ar: ['ar-SA', 'ar-AE', 'en-US']
+        };
+
+        const translations = {
+            en: {
+                loading: 'LOADING',
+                preparing: 'PREPARING YOUR GAME',
+                exit: '← Exit',
+                auto: 'Auto',
+                manual: 'Manual',
+                buy_ticket: '+ Buy ticket',
+                winner_title: 'WINNER',
+                winner_ticket: 'Winner Ticket',
+                winner_unknown: 'Unknown Winner',
+                return_to_lobby: 'Return to Lobby',
+                win_rule_entire_card: 'Entire Card',
+                win_rule_full_card: 'Full Card',
+                win_rule_single_line: 'Single Line',
+                notification_ticket_purchased: '✅ Ticket {current}/{max} purchased',
+                notification_ticket_refreshed: '✅ Ticket refreshed!',
+                notification_ticket_deleted: '✅ Ticket deleted and balance refunded!',
+                notification_game_started: '🎮 Game started!',
+                notification_connection_lost: 'Connection lost, retrying...',
+                notification_connection_restored: 'Connection restored!',
+                notification_token_problem: 'Token problem! Refresh the page.',
+                notification_missing_login: 'Login data not found. Refresh the page.',
+                notification_connection_error: '❌ Connection error: {message}',
+                ticket_number: 'Ticket #{number}',
+                refresh: 'Refresh',
+                delete: 'Delete',
+                bingo: '🎯 BINGO',
+                confirm_exit: 'Your tickets will be deleted and balance refunded. Continue?',
+                invalid_card: 'Card data failed to load',
+                closest_cards_pill_text: '{cards} cards waiting for {numbers} numbers'
+            },
+            tr: {
+                loading: 'YÜKLENİYOR',
+                preparing: 'OYUN HAZIRLANIYOR',
+                exit: '← Çıkış',
+                auto: 'Otomatik',
+                manual: 'Manuel',
+                buy_ticket: '+ Bilet al',
+                winner_title: 'KAZANAN',
+                winner_ticket: 'Kazanan Bilet',
+                winner_unknown: 'Bilinmeyen Kazanan',
+                return_to_lobby: 'Lobiye dön',
+                win_rule_entire_card: 'Tüm Kart',
+                win_rule_full_card: 'Tam Kart',
+                win_rule_single_line: 'Tek Çizgi',
+                notification_ticket_purchased: '✅ Bilet {current}/{max} alındı',
+                notification_ticket_refreshed: '✅ Bilet yenilendi!',
+                notification_ticket_deleted: '✅ Bilet silindi ve bakiye iade edildi!',
+                notification_game_started: '🎮 Oyun başladı!',
+                notification_connection_lost: 'Bağlantı kesildi, tekrar deneniyor...',
+                notification_connection_restored: 'Bağlantı geri geldi!',
+                notification_token_problem: 'Token problemi! Sayfayı yenileyin.',
+                notification_missing_login: 'Giriş bilgileri bulunamadı. Sayfayı yenileyin.',
+                notification_connection_error: '❌ Bağlantı hatası: {message}',
+                ticket_number: 'Bilet #{number}',
+                refresh: 'Yenile',
+                delete: 'Sil',
+                bingo: '🎯 BINGO',
+                confirm_exit: 'Biletleriniz silinecek ve bakiye iade edilecek. Devam edilsin mi?',
+                invalid_card: 'Kart verisi yüklenemedi',
+                closest_cards_pill_text: '{cards} kart {numbers} sayı bekliyor'
+            },
+            hi: {
+                loading: 'लोड हो रहा है',
+                preparing: 'आपका गेम तैयार हो रहा है',
+                exit: '← बाहर जाएं',
+                auto: 'स्वचालित',
+                manual: 'मैनुअल',
+                buy_ticket: '+ टिकट खरीदें',
+                winner_title: 'विजेता',
+                winner_ticket: 'विजेता टिकट',
+                winner_unknown: 'अज्ञात विजेता',
+                return_to_lobby: 'लॉबी में वापस जाएं',
+                win_rule_entire_card: 'पूरा कार्ड',
+                win_rule_full_card: 'पूरा कार्ड',
+                win_rule_single_line: 'एक पंक्ति',
+                notification_ticket_purchased: '✅ टिकट {current}/{max} खरीदा गया',
+                notification_ticket_refreshed: '✅ टिकट रीफ्रेश किया गया!',
+                notification_ticket_deleted: '✅ टिकट हटाया गया और बैलेंस वापस किया गया!',
+                notification_game_started: '🎮 गेम शुरू हो गया!',
+                notification_connection_lost: 'कनेक्शन टूट गया, फिर से प्रयास किया जा रहा है...',
+                notification_connection_restored: 'कनेक्शन बहाल हो गया!',
+                notification_token_problem: 'टोकन समस्या! पेज रिफ्रेश करें।',
+                notification_missing_login: 'लॉगिन जानकारी नहीं मिली। पेज रिफ्रेश करें।',
+                notification_connection_error: '❌ कनेक्शन त्रुटि: {message}',
+                ticket_number: 'टिकट #{number}',
+                refresh: 'रीफ्रेश',
+                delete: 'हटाएं',
+                bingo: '🎯 बिंगो',
+                confirm_exit: 'आपके टिकट हट जाएंगे और बैलेंस वापस होगा। जारी रखें?',
+                invalid_card: 'कार्ड डेटा लोड नहीं हुआ',
+                closest_cards_pill_text: '{cards} कार्ड {numbers} नंबर का इंतज़ार कर रहे हैं'
+            },
+            ru: {
+                loading: 'ЗАГРУЗКА',
+                preparing: 'ПОДГОТОВКА ИГРЫ',
+                exit: '← Выход',
+                auto: 'Авто',
+                manual: 'Вручную',
+                buy_ticket: '+ Купить билет',
+                winner_title: 'ПОБЕДИТЕЛЬ',
+                winner_ticket: 'Билет победителя',
+                winner_unknown: 'Неизвестный победитель',
+                return_to_lobby: 'Вернуться в лобби',
+                win_rule_entire_card: 'Вся карта',
+                win_rule_full_card: 'Полная карта',
+                win_rule_single_line: 'Одна линия',
+                notification_ticket_purchased: '✅ Билет {current}/{max} куплен',
+                notification_ticket_refreshed: '✅ Билет обновлен!',
+                notification_ticket_deleted: '✅ Билет удален, баланс возвращен!',
+                notification_game_started: '🎮 Игра началась!',
+                notification_connection_lost: 'Соединение потеряно, повторная попытка...',
+                notification_connection_restored: 'Соединение восстановлено!',
+                notification_token_problem: 'Проблема с токеном! Обновите страницу.',
+                notification_missing_login: 'Данные входа не найдены. Обновите страницу.',
+                notification_connection_error: '❌ Ошибка соединения: {message}',
+                ticket_number: 'Билет #{number}',
+                refresh: 'Обновить',
+                delete: 'Удалить',
+                bingo: '🎯 БИНГО',
+                confirm_exit: 'Ваши билеты будут удалены, баланс вернется. Продолжить?',
+                invalid_card: 'Данные карты не загружены',
+                closest_cards_pill_text: '{cards} карт ждут {numbers} чисел'
+            },
+            ar: {
+                loading: 'جارٍ التحميل',
+                preparing: 'جارٍ تجهيز لعبتك',
+                exit: '← خروج',
+                auto: 'تلقائي',
+                manual: 'يدوي',
+                buy_ticket: '+ شراء تذكرة',
+                winner_title: 'الفائز',
+                winner_ticket: 'تذكرة الفائز',
+                winner_unknown: 'فائز غير معروف',
+                return_to_lobby: 'العودة إلى الردهة',
+                win_rule_entire_card: 'البطاقة كاملة',
+                win_rule_full_card: 'البطاقة كاملة',
+                win_rule_single_line: 'سطر واحد',
+                notification_ticket_purchased: '✅ تم شراء تذكرة {current}/{max}',
+                notification_ticket_refreshed: '✅ تم تحديث التذكرة!',
+                notification_ticket_deleted: '✅ تم حذف التذكرة وإرجاع الرصيد!',
+                notification_game_started: '🎮 بدأت اللعبة!',
+                notification_connection_lost: 'انقطع الاتصال، جارٍ إعادة المحاولة...',
+                notification_connection_restored: 'تم استعادة الاتصال!',
+                notification_token_problem: 'مشكلة في الرمز! حدّث الصفحة.',
+                notification_missing_login: 'لم يتم العثور على بيانات الدخول. حدّث الصفحة.',
+                notification_connection_error: '❌ خطأ في الاتصال: {message}',
+                ticket_number: 'تذكرة رقم {number}',
+                refresh: 'تحديث',
+                delete: 'حذف',
+                bingo: '🎯 بينغو',
+                confirm_exit: 'سيتم حذف تذاكرك وإرجاع الرصيد. هل تريد المتابعة؟',
+                invalid_card: 'فشل تحميل بيانات البطاقة',
+                closest_cards_pill_text: '{cards} بطاقات تنتظر {numbers} أرقام'
+            },
+            uz: {
+                loading: 'YUKLANMOQDA',
+                preparing: 'O‘YIN TAYYORLANMOQDA',
+                exit: '← Chiqish',
+                auto: 'Avto',
+                manual: 'Qo‘lda',
+                buy_ticket: '+ Bilet sotib olish',
+                winner_title: 'G‘OLIB',
+                winner_ticket: 'G‘olib bileti',
+                winner_unknown: 'Noma’lum g‘olib',
+                return_to_lobby: 'Lobbiga qaytish',
+                win_rule_entire_card: 'Butun karta',
+                win_rule_full_card: 'To‘liq karta',
+                win_rule_single_line: 'Bitta qator',
+                notification_ticket_purchased: '✅ Bilet {current}/{max} sotib olindi',
+                notification_ticket_refreshed: '✅ Bilet yangilandi!',
+                notification_ticket_deleted: '✅ Bilet o‘chirildi va balans qaytarildi!',
+                notification_game_started: '🎮 O‘yin boshlandi!',
+                notification_connection_lost: 'Ulanish uzildi, qayta urinilmoqda...',
+                notification_connection_restored: 'Ulanish tiklandi!',
+                notification_token_problem: 'Token muammosi! Sahifani yangilang.',
+                notification_missing_login: 'Kirish ma’lumotlari topilmadi. Sahifani yangilang.',
+                notification_connection_error: '❌ Ulanish xatosi: {message}',
+                ticket_number: 'Bilet #{number}',
+                refresh: 'Yangilash',
+                delete: 'O‘chirish',
+                bingo: '🎯 BINGO',
+                confirm_exit: 'Biletlar o‘chirilib, balans qaytariladi. Davom etilsinmi?',
+                invalid_card: 'Karta ma’lumoti yuklanmadi',
+                closest_cards_pill_text: '{cards} karta {numbers} raqam kutmoqda'
+            },
+            az: {
+                auto: 'Avtomatik',
+                manual: 'Əl ilə',
+                winner_unknown: 'Namelum qalib',
+                closest_cards_pill_text: '{cards} kart {numbers} nomre gozleyir'
+            }
+        };
+
+        function normalizeLanguage(lang) {
+            if (!lang || typeof lang !== 'string') return 'en';
+            const key = lang.trim().toLowerCase();
+            const primary = key.split(/[-_]/)[0];
+            if (['az', 'aze'].includes(key) || primary === 'az' || key.includes('azer')) return 'en';
+            if (['en', 'eng', 'english'].includes(key) || primary === 'en') return 'en';
+            if (['tr', 'tur', 'turkish', 'tr-tr'].includes(key) || primary === 'tr') return 'tr';
+            if (['hi', 'hin', 'hindi', 'indian', 'india'].includes(key) || primary === 'hi' || primary === 'in') return 'hi';
+            if (['ru', 'rus', 'russian', 'ru-ru'].includes(key) || primary === 'ru') return 'ru';
+            if (['ar', 'ara', 'arabic', 'ar-sa', 'ar-ae'].includes(key) || primary === 'ar') return 'ar';
+            if (['uz', 'uzb', 'uzbek', 'uz-uz'].includes(key) || primary === 'uz') return 'uz';
+            return 'en';
+        }
+
+        function getInitialLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            return normalizeLanguage(params.get('lang') || localStorage.getItem('app_language') || 'en');
+        }
+
+        function t(key, vars = {}) {
+            const dict = translations[currentLanguage] || translations.en;
+            let text = dict[key] || translations.en[key] || key;
+            Object.keys(vars).forEach(k => {
+                text = text.replace(`{${k}}`, vars[k]);
+            });
+            return text;
+        }
+
+        function applyLanguage(lang) {
+            currentLanguage = normalizeLanguage(lang);
+            document.documentElement.lang = currentLanguage;
+            document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+            scheduleSpeechVoiceRefreshes();
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = t(key);
+            });
+
+            // const winRuleEl = document.getElementById("winRuleBadge");
+            // if (winRuleEl) {
+            //     winRuleEl.textContent = translateWinRule(winRule);
+            // }
+
+            // renderTickets();
+            renderClosestCardInsights();
+        }
+
+        function getSpeechLang() {
+            return speechLangMap[currentLanguage] || 'en-US';
+        }
+
+        function refreshSpeechVoices() {
+            if (!('speechSynthesis' in window)) return;
+            speechVoices = window.speechSynthesis.getVoices() || [];
+        }
+
+        function scheduleSpeechVoiceRefreshes() {
+            if (!('speechSynthesis' in window)) return;
+            refreshSpeechVoices();
+            [120, 450, 1000, 1800].forEach(delay => {
+                setTimeout(refreshSpeechVoices, delay);
+            });
+        }
+
+        function pickSpeechVoice(lang) {
+            if (!('speechSynthesis' in window)) return null;
+            if (!speechVoices || speechVoices.length === 0) {
+                refreshSpeechVoices();
+            }
+            const voices = speechVoices;
+            if (!voices || voices.length === 0) return null;
+            const normalizedLang = lang.toLowerCase();
+            const exact = voices.find(v => v.lang && v.lang.toLowerCase() === normalizedLang);
+            if (exact) return exact;
+            const prefix = normalizedLang.split('-')[0];
+            const partial = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
+            if (partial) return partial;
+            return voices.find(v => v.default) || voices[0] || null;
+        }
+
+        function getSpeechConfig() {
+            const requestedLang = getSpeechLang();
+            const fallbackLangs = speechFallbackLangMap[currentLanguage] || ['en-US'];
+            const candidates = [requestedLang, ...fallbackLangs].filter(Boolean);
+
+            for (const lang of candidates) {
+                const voice = pickSpeechVoice(lang);
+                if (!voice) continue;
+
+                const voiceLang = voice.lang || lang;
+                const langPrefix = lang.split('-')[0].toLowerCase();
+                const isLanguageMatch = voiceLang.toLowerCase().startsWith(langPrefix);
+
+                return {
+                    lang: isLanguageMatch ? lang : voiceLang,
+                    voice
+                };
+            }
+
+            return { lang: requestedLang, voice: null };
+        }
+
+        function unlockSpeechSynthesis() {
+            if (!('speechSynthesis' in window) || isSpeechUnlocked) return;
+
+            scheduleSpeechVoiceRefreshes();
+
+            try {
+                const config = getSpeechConfig();
+                const utterance = new SpeechSynthesisUtterance(" ");
+                utterance.lang = config.lang;
+                utterance.volume = 0.01;
+                utterance.rate = 1;
+                utterance.pitch = 1;
+                if (config.voice) {
+                    utterance.voice = config.voice;
+                }
+
+                utterance.onend = () => {
+                    activeSpeechUtterance = null;
+                    if (pendingSpeechNumber !== null) {
+                        const num = pendingSpeechNumber;
+                        pendingSpeechNumber = null;
+                        speakDrawnNumber(num);
+                    }
+                };
+                utterance.onerror = (event) => {
+                    activeSpeechUtterance = null;
+                    const errorName = event?.error;
+                    if (errorName !== "canceled" && errorName !== "interrupted") {
+                        isSpeechUnlocked = false;
+                    }
+                };
+
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.resume();
+                activeSpeechUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+                isSpeechUnlocked = true;
+                setTimeout(() => {
+                    window.speechSynthesis.resume();
+                    if (pendingSpeechNumber !== null) {
+                        const num = pendingSpeechNumber;
+                        pendingSpeechNumber = null;
+                        speakDrawnNumber(num);
+                    }
+                }, 260);
+            } catch (err) {
+                console.warn("Speech unlock failed:", err);
+            }
+        }
+
+        function speakNow(num) {
+            if (isMuted) return;
+            if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) {
+                console.warn("Speech synthesis is not supported in this browser");
+                return;
+            }
+            if (!isSpeechUnlocked) {
+                pendingSpeechNumber = num;
+                return;
+            }
+
+            const config = getSpeechConfig();
+            const utterance = new SpeechSynthesisUtterance(String(num));
+            utterance.lang = config.lang;
+            if (config.voice) {
+                utterance.voice = config.voice;
+            }
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            utterance.onend = () => {
+                activeSpeechUtterance = null;
+            };
+            utterance.onerror = (event) => {
+                const errorName = event?.error;
+                if (errorName !== "canceled" && errorName !== "interrupted") {
+                    console.warn("Drawn number speech failed:", errorName || event);
+                }
+                activeSpeechUtterance = null;
+            };
+
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.resume();
+            activeSpeechUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+
+            setTimeout(() => {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.resume();
+                }
+            }, 120);
+        }
+
+        function speakDrawnNumber(num) {
+            if (isMuted) return;
+            if (!('speechSynthesis' in window)) return;
+            let didSpeak = false;
+
+            const trySpeak = () => {
+                if (didSpeak) return;
+                didSpeak = true;
+                if (speechRetryTimer) {
+                    clearTimeout(speechRetryTimer);
+                    speechRetryTimer = null;
+                }
+                if (!speechVoices || speechVoices.length === 0) {
+                    refreshSpeechVoices();
+                }
+                speakNow(num);
+            };
+
+            if (speechRetryTimer) {
+                clearTimeout(speechRetryTimer);
+                speechRetryTimer = null;
+            }
+
+            speechRetryTimer = setTimeout(trySpeak, 320);
+        }
+
+        function requestDrawnNumberSpeech(num) {
+            if (isIOS || isAndroid || window.parent === window) {
+                speakDrawnNumber(num);
+                return;
+            }
+
+            const requestId = ++lotoSpeechRequestId;
+
+            sendToReact('SPEAK_DRAWN_NUMBER', {
+                requestId,
+                number: num,
+                language: currentLanguage
+            });
+
+            const fallbackTimer = setTimeout(() => {
+                pendingParentSpeechRequests.delete(requestId);
+                speakDrawnNumber(num);
+            }, 1200);
+
+            pendingParentSpeechRequests.set(requestId, fallbackTimer);
+        }
+
+        window.testLotoSpeech = (num = 37) => {
+            isSpeechUnlocked = true;
+            scheduleSpeechVoiceRefreshes();
+            speakNow(num);
+        };
+
+        function foldWinRuleText(rule) {
+            return String(rule ?? '')
+                .replace(/[Əə]/g, 'e')
+                .replace(/[İIı]/g, 'i')
+                .replace(/[Ğğ]/g, 'g')
+                .replace(/[Öö]/g, 'o')
+                .replace(/[Üü]/g, 'u')
+                .replace(/[ŞşȘș]/g, 's')
+                .replace(/[Çç]/g, 'c')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .toLowerCase();
+        }
+
+        function translateWinRule(rule) {
+            if (!rule) return t('win_rule_entire_card');
+            const foldedRule = foldWinRuleText(rule);
+            if (
+                foldedRule.includes('tam kart') ||
+                foldedRule.includes('tum kart') ||
+                foldedRule.includes('full card') ||
+                foldedRule.includes('entire card') ||
+                foldedRule.includes('whole card')
+            ) {
+                return t('win_rule_full_card');
+            }
+            if (
+                foldedRule.includes('bir xett') ||
+                foldedRule.includes('tek cizgi') ||
+                foldedRule.includes('single line') ||
+                foldedRule.includes('one line')
+            ) {
+                return t('win_rule_single_line');
+            }
+            return rule;
+        }
+
+        currentLanguage = getInitialLanguage();
+        applyLanguage(currentLanguage);
+
+        console.log('🎮 [LOTO GAME] Script yükləndi');
+
+        window.addEventListener('message', (event) => {
+            console.log('📨 [LOTO GAME] Message alındı:', event.data);
+
+            if (event.data?.payload?.language) {
+                applyLanguage(event.data.payload.language);
+            }
+
+            if (event.data && event.data.type === 'SPEAK_DRAWN_NUMBER_ACK') {
+                const requestId = event.data.payload?.requestId;
+                const fallbackTimer = pendingParentSpeechRequests.get(requestId);
+                if (fallbackTimer) {
+                    clearTimeout(fallbackTimer);
+                    pendingParentSpeechRequests.delete(requestId);
+                }
+            }
+
+            if (event.data && event.data.type === 'INIT_USER') {
+                console.log('✅ [LOTO GAME] INIT_USER qəbul edildi');
+
+                currentUserData = event.data.payload;
+                currentUserToken = currentUserData.token;
+                currentRoomId = currentUserData.roomId;
+
+                console.log('👤 [LOTO GAME] User:', currentUserData.username);
+                console.log('🎫 [LOTO GAME] Token:', currentUserToken ? 'VAR' : 'YOX');
+                console.log('🎯 [LOTO GAME] RoomId:', currentRoomId);
+
+                const balanceEl = document.getElementById("userBalance");
+                if (balanceEl) {
+                    balanceEl.textContent = currentUserData.balance.toFixed(2);
+                }
+
+                console.log('🚀 [LOTO GAME] init() çağırılır...');
+                // Yalnız bir dəfə init et
+                if (!isInitialized) {
+                    isInitialized = true;
+                    console.log('🚀 [LOTO GAME] init() çağırılır...');
+                    init();
+                } else {
+                    console.log('⚠️ [LOTO GAME] Artıq initialize olunub');
+                }
+            }
+        });
+
+        function sendToReact(type, payload) {
+            console.log('📤 [LOTO GAME] React-a mesaj:', { type, payload });
+            window.parent.postMessage({ type, payload }, '*');
+        }
+
+        function getToken() {
+            const token = currentUserToken || "";
+            console.log('🔑 [LOTO GAME] getToken çağrıldı:', token ? 'VAR (' + token.substring(0, 20) + '...)' : 'YOX');
+            return token;
+        }
+
+        // ============================================
+        // Oyun dəyişənləri
+        // ============================================
+        let connection = null;
+        let myTickets = [];
+        let drawnNumbers = [];
+        let isGameStarted = false;
+        let winRule = "Full Card";
+        let timerInterval = null;
+        let lastTimerValue = -1;
+        let countdownInterval = null;
+        let lastJackpotAmount = null;
+        let jackpotAnimationTimer = null;
+        let lastTicketPurchasedSoundAt = 0;
+        const coinIconMarkup = '<img class="xgame-coin-icon" src="../../assets/siteImages/xGameCoin.png" alt="" aria-hidden="true" />';
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            const translatedMessage = window.translateBackendMessage
+                ? window.translateBackendMessage(message, currentLanguage)
+                : String(message ?? '');
+            notif.className = 'notification';
+            notif.textContent = translatedMessage;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        function playTicketPurchasedCue() {
+            const now = Date.now();
+            if (now - lastTicketPurchasedSoundAt < 180) return;
+            lastTicketPurchasedSoundAt = now;
+            playSound('ticketPurchased');
+        }
+
+        function updateJackpotDisplay(value, shouldAnimateIncrease = true) {
+            const jackpotEl = document.getElementById("jackpotAmount");
+            const jackpotDisplay = jackpotEl?.closest(".jackpot-display");
+            const numericValue = Number(value);
+
+            if (!jackpotEl || !Number.isFinite(numericValue)) return;
+
+            const previousValue = lastJackpotAmount;
+            jackpotEl.textContent = numericValue.toFixed(2);
+            lastJackpotAmount = numericValue;
+
+            if (!shouldAnimateIncrease || previousValue === null || numericValue <= previousValue || !jackpotDisplay) {
+                return;
+            }
+
+            playTicketPurchasedCue();
+
+            if (jackpotAnimationTimer) {
+                clearTimeout(jackpotAnimationTimer);
+            }
+
+            jackpotDisplay.classList.remove("is-jackpot-boost");
+            void jackpotDisplay.offsetWidth;
+            jackpotDisplay.classList.add("is-jackpot-boost");
+
+            jackpotAnimationTimer = setTimeout(() => {
+                jackpotDisplay.classList.remove("is-jackpot-boost");
+                jackpotAnimationTimer = null;
+            }, 1100);
+        }
+
+        function createConnection() {
+            const token = getToken();
+            console.log('🔑 [LOTO] Creating connection with token:', token ? '✅ VAR (' + token.substring(0, 30) + '...)' : '❌ YOX');
+
+            if (!token) {
+                console.error('❌ [LOTO] Token yoxdur! SignalR yaradılmır');
+                throw new Error('Token tapılmadı');
+            }
+
+            connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://api.xgame.game/lotoHub", {
+                    accessTokenFactory: () => {
+                        const t = getToken();
+                        console.log('🎫 [LOTO] accessTokenFactory çağırıldı:', t ? 'Token göndərilir' : 'Token YOX!');
+                        if (!t) {
+                            console.error('❌ [LOTO] CRITICAL: Token null/empty!');
+                        }
+                        return t;
+                    },
+                    skipNegotiation: false,
+                    transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling,
+                    withCredentials: false
+                })
+                .withAutomaticReconnect({
+                    nextRetryDelayInMilliseconds: (retryContext) => {
+                        if (retryContext.elapsedMilliseconds < 60000) {
+                            return Math.random() * 10000;
+                        } else {
+                            return null;
+                        }
+                    }
+                })
+                .configureLogging(signalR.LogLevel.Debug)
+                .build();
+
+            connection.onclose((error) => {
+                console.error('❌ [LOTO] Connection closed:', error);
+                if (!getToken()) {
+                    showNotification(t('notification_token_problem'));
+                }
+            });
+
+            connection.onreconnecting((error) => {
+                console.log('🔄 [LOTO] Reconnecting...', error);
+                showNotification(t('notification_connection_lost'));
+            });
+
+            connection.onreconnected((connectionId) => {
+                console.log('✅ [LOTO] Reconnected:', connectionId);
+                showNotification(t('notification_connection_restored'));
+            });
+
+            setupHandlers();
+            return connection;
+        }
+
+        function setupHandlers() {
+            console.log("📡 Setting up SignalR handlers...");
+
+            connection.on("UserData", (data) => {
+                const balanceEl = document.getElementById("userBalance");
+                if (balanceEl) {
+                    balanceEl.textContent = data.balance.toFixed(2);
+                }
+                // sendToReact('BALANCE_UPDATED', { balance: data.balance });
+            });
+
+            connection.on("RoomJoined", (data) => {
+                myTickets = data.myTickets;
+                isGameStarted = data.isGameStarted;
+                drawnNumbers = data.drawnNumbers || [];
+                winRule = data.winRule || "Full Card";
+                manualMarks.clear();
+                clearClosestCardInsights();
+
+                updateJackpotDisplay(data.jackpot, false);
+
+                const winRuleEl = document.getElementById("winRuleBadge");
+                if (winRuleEl) {
+                    winRuleEl.textContent = translateWinRule(winRule);
+                }
+
+                renderTickets();
+                updateHistory();
+
+                if (!isGameStarted && data.timeRemaining > 0) {
+                    lastTimerValue = data.timeRemaining;
+                    startTimer(data.timeRemaining);
+                }
+
+                // sendToReact('ROOM_JOINED', {
+                //     roomId: currentRoomId,
+                //     ticketCount: myTickets.length,
+                //     jackpot: data.jackpot
+                // });
+            });
+
+            connection.on("TicketPurchased", (data) => {
+                myTickets.push({ ticketId: data.ticketId, card: data.card });
+                manualMarks.delete(data.ticketId);
+
+                const balanceEl = document.getElementById("userBalance");
+                if (balanceEl) {
+                    balanceEl.textContent = data.balance.toFixed(2);
+                }
+
+                showNotification(t('notification_ticket_purchased', { current: data.ticketNumber, max: data.maxTickets }));
+                playTicketPurchasedCue();
+                renderTickets();
+                checkTicketAvailability();
+
+                // sendToReact('BALANCE_UPDATED', { balance: data.balance });
+            });
+
+            connection.on("TicketRefreshed", (data) => {
+                const ticketIndex = myTickets.findIndex(t => t.ticketId === data.ticketId);
+                if (ticketIndex !== -1) {
+                    myTickets[ticketIndex].card = data.card;
+                    manualMarks.delete(data.ticketId);
+                    renderTickets();
+                    showNotification(t('notification_ticket_refreshed'));
+                }
+            });
+
+            connection.on("TicketDeleted", (ticketId) => {
+                myTickets = myTickets.filter(t => t.ticketId !== ticketId);
+                manualMarks.delete(ticketId);
+                console.log("🎟️ Bilet silindi:", myTickets.length);
+                // sendToReact('BALANCE_UPDATED', { balance: data.balance });
+                renderTickets();
+                checkTicketAvailability();
+                showNotification(t('notification_ticket_deleted'));
+            });
+
+            connection.on("RoomUpdated", (data) => {
+                updateJackpotDisplay(data.jackpot, true);
+
+                if (!isGameStarted && data.timeRemaining > 0) {
+                    if (Math.abs(data.timeRemaining - lastTimerValue) > 5 || lastTimerValue === -1) {
+                        lastTimerValue = data.timeRemaining;
+                        startTimer(data.timeRemaining);
+                    }
+                } else if (data.timeRemaining === 0 && !isGameStarted) {
+                    stopTimer();
+                }
+            });
+
+            connection.on("GameStarted", (data) => {
+                isGameStarted = true;
+
+                const buyBtn = document.getElementById("buyTicketBtn");
+                const timerBadge = document.getElementById("timerBadge");
+                const balanceDisplay = document.getElementById("balanceDisplay");
+
+                // const topBarSection = document.querySelector('.top-bar-section');
+
+                if (buyBtn) {
+                    buyBtn.remove();
+                    timerBadge.remove();
+                    balanceDisplay.remove();
+
+                    //     topBarSection.innerHTML =
+                    //         `                
+                    // <div class="top-bar-section">
+                    //     <button id="backBtn" class="exit-button">← Exit</button>
+                    //     <div class="middle-display">
+                    //         <div class="jackpot-display">
+                    //             <span id="jackpotAmount">0.00</span>${coinIconMarkup}
+                    //         </div>
+                    //     </div>
+                    //     <div class="side-display" style="width: auto;">
+                    //         <div class="win-rule-badge" id="winRuleBadge">Entire Card</div>
+                    //     </div>
+                    // </div>
+                    // `;
+                }
+
+                showNotification(t('notification_game_started'));
+
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                }
+
+                document.querySelectorAll('.btn-refresh, .btn-delete').forEach(btn => {
+                    btn.remove();
+                });
+
+                stopTimer();
+                removeButtons();
+                // sendToReact('GAME_STARTED', { roomId: currentRoomId });
+            });
+
+            connection.on("NumberDrawn", (num) => {
+                drawnNumbers.push(num);
+
+                const bigBall = document.getElementById("bigBall");
+                if (bigBall) {
+                    bigBall.textContent = num;
+                }
+
+                updateHistory();
+                playSound('numberDrawn');
+                requestDrawnNumberSpeech(num);
+                markNumber(num);
+                // sendToReact('NUMBER_DRAWN', { number: num, total: drawnNumbers.length });
+            });
+            connection.on("ClosestCardUpdate", (data) => {
+                closestCardRawPayload = data;
+                closestCardGroups = normalizeClosestCardGroups(data);
+                renderClosestCardInsights();
+            });
+            connection.on("BalanceUpdated", (balance) => {
+                const balanceEl = document.getElementById("userBalance");
+                if (balanceEl) {
+                    balanceEl.textContent = balance.toFixed(2);
+                }
+                // sendToReact('BALANCE_UPDATED', { balance: balance });
+            });
+
+            connection.on("GameOver", (data) => {
+                clearClosestCardInsights();
+                console.log("🏆 ========== GAME OVER EVENT ALINDI ==========");
+                console.log("📦 Full Data:", JSON.stringify(data, null, 2));
+
+                const winnerText = resolveWinnerName(data);
+                if (data.isBot) {
+                    // winnerText += ' 🤖';
+
+                }
+
+                const winnerNameEl = document.getElementById("winnerName");
+                if (winnerNameEl) {
+                    winnerNameEl.textContent = winnerText;
+                }
+
+                const winTypeBadge = document.getElementById("winTypeBadge");
+                if (winTypeBadge) {
+                    winTypeBadge.textContent = translateWinRule(data.winType || "Single Line");
+                }
+
+                const prize = data.netPrize || data.prize || 0;
+                const prizeEl = document.getElementById("prizeAmount");
+                if (prizeEl) {
+                    prizeEl.innerHTML = `<span>${prize.toFixed(2)}</span>${coinIconMarkup}`;
+                }
+
+                if (data.winningCard) {
+                    displayWinningCard(data.winningCard);
+                    playSound('win');
+                } else {
+                    console.error("❌ winningCard məlumatı yoxdur!");
+                }
+
+                const modal = document.getElementById("gameOverModal");
+                if (modal) {
+                    modal.classList.add("show");
+                    console.log("✅ Modal açıldı!");
+                }
+
+                if (typeof confetti !== 'undefined') {
+                    confetti({
+                        particleCount: 200,
+                        spread: 120,
+                        origin: { y: 0.5 },
+                        colors: ['#ffd166', '#ff9a3c', '#2dd4bf', '#fff']
+                    });
+
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 150,
+                            angle: 60,
+                            spread: 80,
+                            origin: { x: 0 }
+                        });
+                        confetti({
+                            particleCount: 150,
+                            angle: 120,
+                            spread: 80,
+                            origin: { x: 1 }
+                        });
+                    }, 300);
+                }
+
+                startCountdown();
+                // sendToReact('GAME_ENDED', {
+                //     winner: winnerText,
+                //     prize: prize,
+                //     winType: data.winType
+                // });
+            });
+
+            connection.on("RoomListUpdated", () => {
+                console.log("📋 Otaq siyahısı yeniləndi");
+            });
+
+            connection.on("BotTicketAdded", (data) => {
+                console.log("🤖 Bot bileti əlavə olundu:", data.playerName);
+            });
+
+            connection.on("RoomReset", () => {
+                console.log("🔄 OTAQ RESET EDİLDİ");
+                clearClosestCardInsights();
+            });
+        }
+
+        function startCountdown() {
+            let remaining = 7;
+            const countdownEl = document.getElementById("countdownTimer");
+
+            if (countdownEl) {
+                countdownEl.textContent = remaining;
+            }
+
+            countdownInterval = setInterval(() => {
+                remaining--;
+
+                if (countdownEl) {
+                    countdownEl.textContent = remaining;
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    console.log("⏰ 7 saniyə bitdi, lobbiyə yönləndirilir...");
+                    sendToReact('BACK_TO_LOBBY', {});
+                }
+            }, 1000);
+        }
+
+        function resolveWinnerName(data) {
+            if (!data || typeof data !== "object") {
+                return t('winner_unknown');
+            }
+
+            const candidates = [
+                data.winnerUsername,
+                data.winnerUserName,
+                data.userName,
+                data.username,
+                data.playerName,
+                data.winnerName,
+                data.winner
+            ];
+
+            const found = candidates.find((value) => typeof value === "string" && value.trim());
+            return found ? found.trim() : t('winner_unknown');
+        }
+
+        function displayWinningCard(card) {
+            const grid = document.getElementById("winnerCardGrid");
+            if (!grid) {
+                console.error("❌ winnerCardGrid elementi tapılmadı!");
+                return;
+            }
+
+            grid.innerHTML = "";
+
+            console.log("🎴 Rendering winner card:", card);
+
+            if (!card || !Array.isArray(card) || card.length !== 3) {
+                console.error("❌ Invalid card format:", card);
+                grid.innerHTML = `<p style='color: red; grid-column: 1/-1;'>${t('invalid_card')}</p>`;
+                return;
+            }
+
+            const drawnSet = new Set(drawnNumbers);
+
+            for (let r = 0; r < 3; r++) {
+                if (!Array.isArray(card[r]) || card[r].length !== 9) {
+                    console.error(`❌ Invalid row ${r}:`, card[r]);
+                    continue;
+                }
+
+                for (let c = 0; c < 9; c++) {
+                    const cell = document.createElement("div");
+                    const val = card[r][c];
+
+                    if (val === null || val === undefined) {
+                        cell.className = "winner-cell blank";
+                    } else {
+                        const isDrawn = drawnSet.has(val);
+                        cell.className = `winner-cell ${isDrawn ? 'winning' : 'not-drawn'}`;
+                        cell.textContent = val;
+                    }
+
+                    grid.appendChild(cell);
+                }
+            }
+
+            console.log("✅ Winner card rendered successfully");
+        }
+
+        function startTimer(seconds) {
+            stopTimer();
+            let remaining = seconds;
+            const timerBadge = document.getElementById("timerBadge");
+
+            if (!timerBadge) return;
+
+            timerInterval = setInterval(() => {
+                remaining--;
+
+                if (remaining <= 0) {
+                    stopTimer();
+                    // timerBadge.textContent = winRule;
+                    return;
+                }
+
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                timerBadge.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function renderTickets() {
+            const container = document.getElementById("ticketsContainer");
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            myTickets.forEach((ticket, index) => {
+                const ticketDiv = document.createElement("div");
+                ticketDiv.className = "ticket";
+
+                let gridHTML = '';
+                for (let r = 0; r < 3; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const val = ticket.card[r][c];
+                        const isMarked = val !== null && (isAutoMark ? drawnNumbers.includes(val) : isManuallyMarked(ticket.ticketId, val));
+                        const cellClass = val === null ? 'cell blank' : `cell ${isMarked ? 'marked' : ''}`;
+                        gridHTML += `<div class="${cellClass}" data-ticket-id="${ticket.ticketId}" data-value="${val ?? ''}">${val ?? ''}</div>`;
+                    }
+                }
+
+                // <div class="ticket-number">${t('ticket_number', { number: index + 1 })}</div>
+                ticketDiv.innerHTML = `
+                <div class="ticket-header">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-refresh" onclick="refreshTicket('${ticket.ticketId}')"
+                                ${isGameStarted ? 'disabled' : ''}>
+                            <span class="btn-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+                                    <path d="M21 3v6h-6"/>
+                                </svg>
+                            </span>
+                            ${t('refresh')}
+                        </button>
+                        <button class="btn-delete" onclick="deleteTicket('${ticket.ticketId}')"
+                                ${isGameStarted ? 'disabled' : ''}>
+                            <span class="btn-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 6l12 12"/>
+                                    <path d="M18 6l-12 12"/>
+                                </svg>
+                            </span>
+                            ${t('delete')}
+                        </button>
+                        <button class="btn" style="display: none;" onclick="callBingo('${ticket.ticketId}')"
+                                ${!isGameStarted ? 'disabled' : ''}>
+                            ${t('bingo')}
+                        </button>
+                    </div>
+                </div>
+                <div class="ticket-card">
+                    <div class="card-grid">${gridHTML}</div>
+                </div>
+            `;
+
+                removeButtons();
+
+                container.appendChild(ticketDiv);
+            });
+        }
+
+        // function removeButtons() {
+        //     if (isGameStarted) {
+        //         document.querySelectorAll('.btn-refresh, .btn-delete').forEach(btn => {
+        //             btn.remove();
+        //             console.log(document.querySelectorAll('.btn-refresh, .btn-delete'));
+
+        //         });
+        //     }
+        // }
+        function removeButtons() {
+            if (!isGameStarted) return;
+
+            document.querySelectorAll('.btn-refresh, .btn-delete').forEach(btn => btn.remove());
+        }
+
+        const observer = new MutationObserver(() => {
+            removeButtons();
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        function checkTicketAvailability() {
+            console.log("🎟️ Bilet almaq istənir, mövcud biletlər sayı:", myTickets.length);
+
+            const buyTicketBtn = document.getElementById("buyTicketBtn");
+            if (!buyTicketBtn) return;
+
+            buyTicketBtn.disabled = myTickets.length >= 6;
+        }
+
+        function parseClosestCardNumber(value) {
+            if (typeof value === "number" && Number.isFinite(value)) return value;
+            if (typeof value === "string" && value.trim() !== "") {
+                const parsed = Number(value);
+                if (Number.isFinite(parsed)) return parsed;
+            }
+            return null;
+        }
+
+        function readClosestCardMetric(source, keys) {
+            if (!source || typeof source !== "object") return null;
+            for (const key of keys) {
+                const parsed = parseClosestCardNumber(source[key]);
+                if (parsed !== null) return parsed;
+            }
+            return null;
+        }
+
+        function readClosestCardMetricByPattern(source, pattern) {
+            if (!source || typeof source !== "object") return null;
+
+            for (const [key, value] of Object.entries(source)) {
+                if (!pattern.test(String(key))) continue;
+                const parsed = parseClosestCardNumber(value);
+                if (parsed !== null) return parsed;
+            }
+
+            return null;
+        }
+
+        function extractNumbersAway(source) {
+            const direct = readClosestCardMetric(source, [
+                "numbersAway",
+                "numbersLeft",
+                "numberLeft",
+                "remainingNumbersCount",
+                "remainingNumberCount",
+                "remainingCount",
+                "remaining",
+                "numbersNeeded",
+                "neededNumberCount",
+                "neededNumbersCount",
+                "missingCount",
+                "missingNumbersCount",
+                "waitingNumberCount",
+                "waitingNumbersCount",
+                "distance",
+                "closestDistance"
+            ]);
+
+            if (direct !== null) return direct;
+
+            const arrayKeys = [
+                "remainingNumbers",
+                "missingNumbers",
+                "numbersNeededList",
+                "neededNumbers",
+                "awaitingNumbers",
+                "numbersToWin",
+                "waitingNumbers",
+                "leftNumbers"
+            ];
+
+            for (const key of arrayKeys) {
+                if (Array.isArray(source?.[key])) {
+                    return source[key].length;
+                }
+            }
+
+            const guessed = readClosestCardMetricByPattern(
+                source,
+                /(number|num|digit|reqem|raqam|remain|left|wait|need|missing|away|distance)/i
+            );
+
+            if (guessed !== null) return guessed;
+
+            return null;
+        }
+
+        function extractCardCount(source) {
+            const direct = readClosestCardMetric(source, [
+                "cardCount",
+                "cardsCount",
+                "closestCardCount",
+                "closestCardsCount",
+                "ticketCount",
+                "ticketsCount",
+                "playerCardCount",
+                "count",
+                "total",
+                "totalCards"
+            ]);
+
+            if (direct !== null) return direct;
+
+            const collectionKeys = ["cards", "tickets", "closestCards"];
+            for (const key of collectionKeys) {
+                if (Array.isArray(source?.[key])) {
+                    return source[key].length;
+                }
+            }
+
+            const guessed = readClosestCardMetricByPattern(
+                source,
+                /(card|ticket|kart|bilet)/i
+            );
+
+            if (guessed !== null) return guessed;
+
+            return null;
+        }
+
+        function createClosestCardGroup(source) {
+            if (!source || typeof source !== "object") return null;
+
+            const numbersAway = extractNumbersAway(source);
+            if (numbersAway === null) return null;
+
+            return {
+                numbersAway,
+                cardCount: extractCardCount(source) ?? 1
+            };
+        }
+
+        function collectClosestCardGroups(payload, depth = 0) {
+            if (depth > 3 || payload == null) return [];
+
+            if (Array.isArray(payload)) {
+                return payload.flatMap((item) => collectClosestCardGroups(item, depth + 1));
+            }
+
+            if (typeof payload !== "object") {
+                return [];
+            }
+
+            const directGroup = createClosestCardGroup(payload);
+            if (directGroup) {
+                return [directGroup];
+            }
+
+            const containerKeys = [
+                "closestCards",
+                "closestCardUpdates",
+                "closest",
+                "groups",
+                "items",
+                "data",
+                "summary",
+                "stats",
+                "payload",
+                "result"
+            ];
+
+            for (const key of containerKeys) {
+                const nested = collectClosestCardGroups(payload[key], depth + 1);
+                if (nested.length) {
+                    return nested;
+                }
+            }
+
+            for (const value of Object.values(payload)) {
+                const nested = collectClosestCardGroups(value, depth + 1);
+                if (nested.length) {
+                    return nested;
+                }
+            }
+
+            const groupedEntries = Object.entries(payload)
+                .map(([key, value]) => {
+                    const numbersAway = parseClosestCardNumber(key);
+                    const cardCount = parseClosestCardNumber(value);
+
+                    if (numbersAway !== null && cardCount !== null) {
+                        return { numbersAway, cardCount };
+                    }
+
+                    if (numbersAway !== null && value && typeof value === "object") {
+                        const nestedGroup = createClosestCardGroup(value);
+                        if (nestedGroup) {
+                            return {
+                                numbersAway,
+                                cardCount: nestedGroup.cardCount
+                            };
+                        }
+                    }
+
+                    return null;
+                })
+                .filter(Boolean);
+
+            return groupedEntries;
+        }
+
+        function normalizeClosestCardGroups(payload) {
+            const grouped = new Map();
+
+            collectClosestCardGroups(payload).forEach((group) => {
+                const numbersAway = Math.round(Number(group.numbersAway));
+                const cardCount = Math.round(Number(group.cardCount));
+
+                if (!Number.isFinite(numbersAway) || !Number.isFinite(cardCount)) return;
+                if (numbersAway < 1 || cardCount < 1) return;
+
+                grouped.set(numbersAway, (grouped.get(numbersAway) || 0) + cardCount);
+            });
+
+            return Array.from(grouped.entries())
+                .map(([numbersAway, cardCount]) => ({ numbersAway, cardCount }))
+                .sort((a, b) => a.numbersAway - b.numbersAway);
+        }
+
+        function renderClosestCardInsights() {
+            const list = document.getElementById("closestCardPills");
+            if (!list) return;
+
+            if (!closestCardGroups.length) {
+                if (closestCardRawPayload) {
+                    console.warn("⚠️ [LOTO] ClosestCardUpdate gəldi, amma render üçün uyğun format tapılmadı:", closestCardRawPayload);
+                }
+                list.innerHTML = "";
+                list.hidden = true;
+                list.classList.add("is-hidden");
+                return;
+            }
+
+            list.hidden = false;
+            list.classList.remove("is-hidden");
+            list.innerHTML = "";
+
+            closestCardGroups.forEach((group) => {
+                const pill = document.createElement("span");
+                pill.className = "closest-card-pill";
+                if (group.numbersAway === 1) {
+                    pill.classList.add("is-critical");
+                }
+                pill.textContent = t('closest_cards_pill_text', {
+                    cards: group.cardCount,
+                    numbers: group.numbersAway
+                });
+                list.appendChild(pill);
+            });
+        }
+
+        function clearClosestCardInsights() {
+            closestCardGroups = [];
+            closestCardRawPayload = null;
+            renderClosestCardInsights();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById("history");
+            if (!history) return;
+
+            history.innerHTML = "";
+
+            const last20 = drawnNumbers.slice(-20).reverse();
+            last20.forEach(num => {
+                const ball = document.createElement("div");
+                ball.className = "history-ball";
+                ball.textContent = num;
+                history.appendChild(ball);
+            });
+        }
+
+        function markNumber(num) {
+            renderTickets();
+        }
+
+        function getManualSet(ticketId) {
+            if (!manualMarks.has(ticketId)) {
+                manualMarks.set(ticketId, new Set());
+            }
+            return manualMarks.get(ticketId);
+        }
+
+        function isManuallyMarked(ticketId, val) {
+            const set = manualMarks.get(ticketId);
+            return set ? set.has(val) : false;
+        }
+
+        function toggleManualMark(ticketId, val) {
+            const set = getManualSet(ticketId);
+            if (set.has(val)) {
+                set.delete(val);
+            } else {
+                set.add(val);
+            }
+        }
+
+        function setAutoMarkState(enabled) {
+            isAutoMark = enabled;
+            const autoBtn = document.getElementById("autoBtn");
+            if (autoBtn) {
+                autoBtn.classList.toggle("is-active", enabled);
+                autoBtn.classList.toggle("is-inactive", !enabled);
+                autoBtn.setAttribute("aria-pressed", enabled ? "true" : "false");
+                const autoText = autoBtn.querySelector(".auto-text");
+                if (autoText) {
+                    const translationKey = enabled ? "auto" : "manual";
+                    autoText.setAttribute("data-i18n", translationKey);
+                    autoText.textContent = t(translationKey);
+                }
+            }
+            if (!enabled) {
+                manualMarks.clear();
+            }
+            renderTickets();
+        }
+
+        function goToLobby() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            sendToReact('BACK_TO_LOBBY', {});
+        }
+
+        async function refreshTicket(ticketId) {
+            if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                console.log("❌ Bağlantı yoxdur");
+                return;
+            }
+            try {
+                await connection.invoke("RefreshTicket", ticketId);
+            } catch (err) {
+                console.error("Refresh error:", err);
+                console.log("❌ Yeniləmə xətası");
+            }
+        }
+
+        async function deleteTicket(ticketId) {
+            if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                console.log("❌ Bağlantı yoxdur");
+                return;
+            }
+            try {
+                await connection.invoke("DeleteTicket", ticketId);
+
+            } catch (err) {
+                console.error("Delete error:", err);
+                console.log("❌ Silmə xətası");
+            }
+        }
+
+        async function callBingo(ticketId) {
+            if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                console.log("❌ Bağlantı yoxdur");
+                return;
+            }
+            try {
+                await connection.invoke("Bingo", ticketId);
+            } catch (err) {
+                console.error("Bingo error:", err);
+                console.log("❌ Bingo uğursuz oldu");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const buyBtn = document.getElementById("buyTicketBtn");
+            const backBtn = document.getElementById("backBtn");
+            const autoBtn = document.getElementById("autoBtn");
+            const ticketsContainer = document.getElementById("ticketsContainer");
+
+            if ('speechSynthesis' in window) {
+                scheduleSpeechVoiceRefreshes();
+                window.speechSynthesis.onvoiceschanged = () => {
+                    refreshSpeechVoices();
+                };
+            }
+
+            if (autoBtn) {
+                autoBtn.addEventListener("click", () => {
+                    setAutoMarkState(!isAutoMark);
+                });
+            }
+
+            if (ticketsContainer) {
+                ticketsContainer.addEventListener("click", (event) => {
+                    if (isAutoMark) return;
+                    const cell = event.target.closest(".cell");
+                    if (!cell || cell.classList.contains("blank")) return;
+                    const ticketId = cell.getAttribute("data-ticket-id");
+                    const valueAttr = cell.getAttribute("data-value");
+                    const val = valueAttr === null || valueAttr === "" ? null : Number(valueAttr);
+                    if (!ticketId || val === null || Number.isNaN(val)) return;
+                    if (!drawnNumbers.includes(val)) return;
+                    toggleManualMark(ticketId, val);
+                    renderTickets();
+                });
+            }
+
+            setAutoMarkState(true);
+
+            if (buyBtn) {
+                buyBtn.addEventListener("click", async () => {
+                    if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                        console.log("❌ Bağlantı yoxdur");
+                        return;
+                    }
+
+                    try {
+                        const result = await connection.invoke("BuyTicket", currentRoomId);
+                        if (result && result.success === false) {
+                            console.log("❌ " + result.message);
+                        }
+                    } catch (err) {
+                        console.error("Buy ticket error:", err);
+                        console.log("❌ Bilet almaq alınmadı");
+                    }
+                });
+            }
+
+            if (backBtn) {
+                backBtn.addEventListener("click", async () => {
+                    if (myTickets.length > 0 && !isGameStarted) {
+                        if (confirm(t('confirm_exit'))) {
+                            if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                                try {
+                                    for (const ticket of myTickets) {
+                                        await connection.invoke("DeleteTicket", ticket.ticketId);
+                                    }
+                                } catch (err) {
+                                    console.error("Exit error:", err);
+                                }
+                            }
+                        }
+                    }
+
+                    sendToReact('BACK_TO_LOBBY', {});
+                });
+            }
+        });
+        function manageLoading() {
+            const loadingContainer = document.getElementById('loadingContainer');
+            const gameContainer = document.querySelector('.loto-game-container');
+
+            if (loadingContainer && gameContainer) {
+                loadingContainer.style.display = 'none';
+                gameContainer.style.display = 'block';
+            }
+        }
+
+
+        // async function init() {
+        //     console.log('🚀 [LOTO GAME] init() başladı');
+
+        //     if (!currentUserToken) {
+        //         console.error('❌ [LOTO GAME] Token yoxdur!');
+        //         return;
+        //     }
+
+        //     if (!currentRoomId) {
+        //         console.error('❌ [LOTO GAME] RoomId yoxdur!');
+        //         sendToReact('BACK_TO_LOBBY', {});
+        //         return;
+        //     }
+
+        //     try {
+        //         if (connection) {
+        //             console.log("🔄 [LOTO GAME] Köhnə connection bağlanır...");
+        //             try {
+        //                 await connection.stop();
+        //             } catch (e) {
+        //                 console.log('Stop error (ignored):', e);
+        //             }
+        //             connection = null;
+        //         }
+
+        //         await new Promise(resolve => setTimeout(resolve, 100));
+
+        //         connection = createConnection();
+
+        //         console.log("📡 [LOTO GAME] SignalR connection başlayır...");
+        //         await connection.start(); // ← AWAIT var, amma yetərli deyil
+
+        //         // ← BU HİSSƏNİ ƏLAVƏ ET - state yoxla:
+        //         if (connection.state !== signalR.HubConnectionState.Connected) {
+        //             throw new Error('Connection Connected state-də deyil: ' + connection.state);
+        //         }
+
+        //         console.log("✅ [LOTO GAME] SignalR connected! State:", connection.state);
+
+        //         console.log("🚪 [LOTO GAME] Joining room:", currentRoomId);
+        //         await connection.invoke("JoinRoomView", currentRoomId);
+        //         console.log("✅ [LOTO GAME] Room joined!");
+
+        //         sendToReact('CONNECTION_SUCCESS', { roomId: currentRoomId });
+        //         manageLoading();
+
+        //     } catch (err) {
+        //         console.error("❌ [LOTO GAME] Connection error:", err);
+        //         console.error("❌ Error details:", err.message, err.stack);
+        //         console.log("❌ Bağlantı xətası: " + err.message);
+        //         sendToReact('CONNECTION_ERROR', { error: err.message });
+
+        //         // ← RETRY mexanizmi əlavə et (optional):
+        //         setTimeout(() => {
+        //             console.log('🔄 Retry edilir...');
+        //             init();
+        //         }, 2000);
+        //     }
+        // }
+
+        async function init() {
+            console.log('🚀 [LOTO GAME] init() başladı');
+
+            // Token yoxlaması
+            const token = getToken();
+            if (!token) {
+                console.error('❌ [LOTO GAME] Token yoxdur!');
+                showNotification(t('notification_missing_login'));
+                return;
+            }
+
+            if (!currentRoomId) {
+                console.error('❌ [LOTO GAME] RoomId yoxdur!');
+                sendToReact('BACK_TO_LOBBY', {});
+                return;
+            }
+
+            try {
+                // Köhnə connection-u bağla
+                if (connection) {
+                    console.log("🔄 [LOTO GAME] Köhnə connection bağlanır...");
+                    try {
+                        await connection.stop();
+                    } catch (e) {
+                        console.log('Stop error (ignored):', e);
+                    }
+                    connection = null;
+                }
+
+                // Kiçik pause
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                console.log('✅ [LOTO] Token mövcuddur, connection yaradılır...');
+                connection = createConnection();
+
+                console.log("🔄 [LOTO GAME] SignalR.start() çağırılır...");
+                await connection.start();
+
+                // State yoxlama
+                if (connection.state !== signalR.HubConnectionState.Connected) {
+                    throw new Error('Connection Connected state-də deyil: ' + connection.state);
+                }
+
+                console.log("✅ [LOTO GAME] SignalR connected! State:", connection.state);
+
+                console.log("🚪 [LOTO GAME] Joining room:", currentRoomId);
+                await connection.invoke("JoinRoomView", currentRoomId);
+                console.log("✅ [LOTO GAME] Room joined!");
+
+                sendToReact('CONNECTION_SUCCESS', { roomId: currentRoomId });
+                manageLoading();
+
+            } catch (err) {
+                console.error("❌ [LOTO GAME] Connection error:", err);
+                console.error("❌ Error details:", err.message);
+                console.error("❌ Stack:", err.stack);
+                showNotification(t('notification_connection_error', { message: err.message }));
+                sendToReact('CONNECTION_ERROR', { error: err.message });
+
+                // Retry (optional - şərtli)
+                if (!err.message.includes('Token')) {
+                    setTimeout(() => {
+                        console.log('🔄 Retry edilir...');
+                        init();
+                    }, 3000);
+                }
+            }
+        }
+
+        console.log('✅ [LOTO GAME] Script tam yükləndi, postMessage gözlənilir...');
+    </script>
+</body>
+
+</html>

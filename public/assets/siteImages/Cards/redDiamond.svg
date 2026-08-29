@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1285 1786" width="1285" height="1786">
+	<style>
+		.s0 { fill: #ffffff;stroke: #1d1d1b;stroke-miterlimit:2.4142;stroke-width: .5 } 
+		.s1 { fill: #d40000 } 
+	</style>
+	<g id="&lt;Group&gt;">
+		<path id="&lt;Path&gt;" class="s0" d="m1217.37 1786c37.36 0 67.63-27.58 67.63-61.59v-1662.82c0-34.02-30.27-61.59-67.63-61.59h-1149.74c-37.36 0-67.63 27.57-67.63 61.59v1662.82c0 34.01 30.27 61.59 67.63 61.59z"/>
+		<g id="&lt;Group&gt;">
+			<g id="&lt;Group&gt;">
+				<g id="&lt;Group&gt;">
+					<path id="&lt;Path&gt;" class="s1" d="m642.52 658.97c0 0 58.13 167.45 192.73 234.96 0 0-132.73 62.08-192.73 233.1-60-171.02-192.78-233.1-192.78-233.1 134.6-67.51 192.78-234.96 192.78-234.96z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

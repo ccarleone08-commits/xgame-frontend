@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-height: 200vh;
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2777), rgba(0,0,0,0.2777)),
+  url(/assets/siteImages/siteMainBG.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  touch-action: pan-y;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding-top: calc(56px + env(safe-area-inset-top));
+  /* Height of TopBar */
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  /* Height of Navbar */
+  min-height: calc(100vh - 113px);
+  min-height: calc(100dvh - 126px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  /* 100vh - (TopBar + Navbar) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: calc(50px + env(safe-area-inset-top));
+    min-height: calc(100dvh - 120px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+}

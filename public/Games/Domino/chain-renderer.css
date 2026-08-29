@@ -1,0 +1,430 @@
+#chain.cr-chain {
+    --cr-move-duration: 450ms;
+    --cr-move-delay: 16ms;
+    --cr-fade-duration: 300ms;
+    --cr-fade-slow-duration: 650ms;
+    --cr-highlight-duration: 120ms;
+    --cr-easing: ease-in-out;
+    --cr-base-w: 26px;
+    --cr-base-h: 52px;
+    --cr-pip-size: 4px;
+    --cr-pip-pad: 5px;
+    --cr-divider-size: 1px;
+    --cr-radius: 6px;
+    --cr-tile-bg: #f7f4eb;
+    --cr-tile-edge: rgba(15, 23, 42, 0.28);
+    --cr-tile-highlight: rgba(255, 255, 255, 0.64);
+    --cr-pip-color: #111827;
+    --cr-divider-color: rgba(17, 24, 39, 0.32);
+    --cr-spinner-color: #e55615;
+    --cr-spinner-glow-color: rgba(229, 86, 21, 0.48);
+    --cr-spinner-soft-color: rgba(229, 86, 21, 0.12);
+    --cr-spinner-active-color: rgba(229, 86, 21, 0.22);
+    --cr-invalid-color: #e55615;
+    --cr-shadow-color: rgba(0, 0, 0, 0.28);
+    --cr-empty-color: rgba(255, 255, 255, 0.78);
+    --cr-empty-font-size: 0.9rem;
+    display: block;
+    position: relative;
+    min-width: 100%;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+    scrollbar-width: none;
+    cursor: default;
+}
+
+#chain.cr-chain::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+#chain.cr-chain.cr-panning {
+    cursor: default;
+}
+
+.cr-world {
+    position: relative;
+    min-width: 100%;
+    min-height: 100%;
+    transform-origin: 50% 50%;
+    transition:
+        transform var(--cr-move-duration) var(--cr-easing) var(--cr-move-delay),
+        opacity var(--cr-fade-slow-duration) ease-in 1ms;
+}
+
+.cr-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--cr-empty-color);
+    font-size: var(--cr-empty-font-size);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: center;
+    pointer-events: none;
+}
+
+.cr-tile-shell {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    transition:
+        transform var(--cr-move-duration) var(--cr-easing) var(--cr-move-delay),
+        opacity var(--cr-fade-slow-duration) ease-in 1ms;
+    will-change: transform, opacity;
+}
+
+.cr-tile-shell.cr-flight-hidden {
+    opacity: 0;
+}
+
+#chain.cr-chain .cr-tile-shell .tile,
+.cr-flight .tile,
+.cr-placement-guide .tile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: 0 !important;
+    cursor: default;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) scale(var(--cr-legacy-scale, 0.7)) rotate(0deg) !important;
+}
+
+#chain.cr-chain .cr-tile-shell .tile.horizontal,
+.cr-flight.cr-orient-horizontal .tile,
+.cr-placement-guide.cr-orient-horizontal .tile {
+    transform: translate(-50%, -50%) scale(var(--cr-legacy-scale, 0.7)) rotate(-90deg) !important;
+}
+
+#chain.cr-chain .cr-tile-shell.cr-rot-90 .tile.horizontal,
+.cr-flight.cr-rot-90.cr-orient-horizontal .tile,
+.cr-placement-guide.cr-rot-90.cr-orient-horizontal .tile {
+    transform: translate(-50%, -50%) scale(var(--cr-legacy-scale, 0.7)) rotate(-90deg) !important;
+}
+
+#chain.cr-chain .cr-tile-shell.cr-rot-180 .tile:not(.horizontal),
+.cr-flight.cr-rot-180.cr-orient-vertical .tile,
+.cr-placement-guide.cr-rot-180.cr-orient-vertical .tile {
+    transform: translate(-50%, -50%) scale(var(--cr-legacy-scale, 0.7)) rotate(0deg) !important;
+}
+
+#chain.cr-chain .cr-spinner .tile {
+    border: 3px solid #10b981;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+    filter: none;
+}
+
+.cr-tile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--cr-base-w);
+    height: var(--cr-base-h);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--cr-divider-size) solid var(--cr-tile-edge);
+    border-radius: var(--cr-radius);
+    background:
+        linear-gradient(145deg, var(--cr-tile-highlight), transparent 42%),
+        var(--cr-tile-bg);
+    box-shadow:
+        0 calc(var(--cr-pip-size) * 0.8) calc(var(--cr-pip-size) * 2.3) var(--cr-shadow-color),
+        inset 0 0 0 var(--cr-divider-size) var(--cr-tile-highlight);
+    transform: translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.cr-orient-horizontal .cr-tile {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.cr-rot-270.cr-orient-horizontal .cr-tile {
+    transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.cr-rot-180.cr-orient-vertical .cr-tile {
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.cr-half {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+.cr-divider {
+    flex: 0 0 var(--cr-divider-size);
+    background: var(--cr-divider-color);
+}
+
+.cr-pips {
+    position: absolute;
+    inset: var(--cr-pip-pad);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    align-items: center;
+    justify-items: center;
+}
+
+.cr-pip {
+    width: var(--cr-pip-size);
+    height: var(--cr-pip-size);
+    border-radius: 50%;
+    background: var(--cr-pip-color);
+    box-shadow: inset 0 0 0 calc(var(--cr-divider-size) * 0.5) var(--cr-tile-edge);
+}
+
+.cr-pip-1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.cr-pip-3 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.cr-pip-4 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.cr-pip-5 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.cr-pip-6 {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.cr-pip-7 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.cr-pip-9 {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+.cr-double .cr-tile {
+    box-shadow:
+        0 calc(var(--cr-pip-size) * 0.8) calc(var(--cr-pip-size) * 2.3) var(--cr-shadow-color),
+        inset 0 0 0 calc(var(--cr-divider-size) * 1.6) var(--cr-divider-color);
+}
+
+.cr-spinner .cr-tile {
+    border-color: var(--cr-spinner-color);
+}
+
+.cr-spinner-mark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--cr-pip-size) * 1.7);
+    height: calc(var(--cr-pip-size) * 1.7);
+    border: var(--cr-divider-size) solid var(--cr-spinner-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+}
+
+.cr-place-in {
+    animation: cr-place-in var(--cr-move-duration) var(--cr-easing) var(--cr-move-delay) both;
+}
+
+.cr-flight {
+    --cr-base-w: 26px;
+    --cr-base-h: 52px;
+    --cr-pip-size: 4px;
+    --cr-pip-pad: 5px;
+    --cr-divider-size: 1px;
+    --cr-radius: 6px;
+    --cr-tile-bg: #f7f4eb;
+    --cr-tile-edge: rgba(15, 23, 42, 0.28);
+    --cr-tile-highlight: rgba(255, 255, 255, 0.64);
+    --cr-pip-color: #111827;
+    --cr-divider-color: rgba(17, 24, 39, 0.32);
+    --cr-spinner-color: #e55615;
+    --cr-shadow-color: rgba(0, 0, 0, 0.28);
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    will-change: transform, opacity;
+}
+
+.cr-guide-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 80;
+    pointer-events: none;
+}
+
+.cr-placement-guide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.74;
+    overflow: visible;
+    border: calc(var(--cr-divider-size) * 2) dashed rgba(255, 255, 255, 0.72);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.34);
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.2),
+        inset 0 0 0 var(--cr-divider-size) rgba(255, 255, 255, 0.24);
+    transition:
+        opacity var(--cr-highlight-duration) ease-in 1ms,
+        transform var(--cr-move-duration) var(--cr-easing) var(--cr-move-delay);
+    animation: cr-guide-in var(--cr-highlight-duration) ease-in 1ms both;
+}
+
+.cr-placement-guide .tile {
+    opacity: 0.48;
+    filter: saturate(0.8) brightness(0.92);
+}
+
+.cr-placement-guide.cr-guide-active {
+    opacity: 0.96;
+    border-color: #10b981;
+    border-style: solid;
+    background: rgba(0, 0, 0, 0.42);
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.28),
+        0 0 0 calc(var(--cr-divider-size) * 2) rgba(16, 185, 129, 0.18),
+        inset 0 0 0 var(--cr-divider-size) rgba(255, 255, 255, 0.34);
+}
+
+.cr-placement-guide.cr-guide-active .tile {
+    opacity: 0.68;
+    filter: saturate(1) brightness(1);
+}
+
+.cr-placement-guide::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--cr-pip-size) * -0.9);
+    top: 50%;
+    width: calc(var(--cr-pip-size) * 1.6);
+    height: calc(var(--cr-pip-size) * 1.6);
+    border-radius: 50%;
+    background: #10b981;
+    transform: translateY(-50%);
+    opacity: 0.95;
+}
+
+.cr-guide-left::after {
+    left: auto;
+    right: calc(var(--cr-pip-size) * -0.9);
+    transform: translateY(-50%);
+}
+
+.cr-guide-center-top::after,
+.cr-guide-center-bottom::after {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+.cr-guide-center-top::after {
+    top: auto;
+    bottom: calc(var(--cr-pip-size) * -0.9);
+}
+
+.cr-guide-center-bottom::after {
+    top: calc(var(--cr-pip-size) * -0.9);
+}
+
+.cr-placement-guide.cr-guide-hide {
+    animation: cr-guide-out var(--cr-fade-duration) ease-in 1ms both;
+}
+
+#chain.cr-chain.cr-invalid-board {
+    animation: cr-invalid-board var(--cr-fade-duration) var(--cr-easing) both;
+}
+
+@keyframes cr-place-in {
+    0% {
+        opacity: 0.57;
+        filter: brightness(1.18);
+    }
+
+    100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+}
+
+@keyframes cr-invalid-board {
+    0%,
+    100% {
+        box-shadow: none;
+    }
+
+    30%,
+    70% {
+        box-shadow: inset 0 0 0 calc(var(--cr-divider-size) * 2) var(--cr-invalid-color);
+    }
+}
+
+@keyframes cr-guide-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.57;
+    }
+}
+
+@keyframes cr-guide-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    #chain.cr-chain {
+        --cr-base-w: 23px;
+        --cr-base-h: 46px;
+        --cr-pip-size: 4px;
+        --cr-pip-pad: 5px;
+        --cr-empty-font-size: 0.84rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #chain.cr-chain {
+        --cr-base-w: 21px;
+        --cr-base-h: 42px;
+        --cr-pip-size: 3px;
+        --cr-pip-pad: 4px;
+        --cr-empty-font-size: 0.78rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #chain.cr-chain,
+    .cr-world,
+    .cr-tile-shell,
+    .cr-flight {
+        animation-duration: 1ms;
+        transition-duration: 1ms;
+        scroll-behavior: auto;
+    }
+}
